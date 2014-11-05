@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GeoSnap</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="login">Login</string>
+    <string name="lbl_geosnap">GeoSnap</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="lblExit">Exit</string>
+    <string name="lblSettings">Settings</string>
+    <string name="lblUpload">Upload</string>
+    <string name="lblViewSites">View Sites</string>
+    <string name="lblNewSite">New Site</string>
+
+</resources>
