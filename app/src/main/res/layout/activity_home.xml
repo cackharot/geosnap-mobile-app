@@ -23,7 +23,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnNewSite"
                 android:layout_gravity="left|top"
-                android:text="@string/lblNewSite" />
+                android:text="@string/lblNewSite"
+                android:onClick="doNavigation" />
 
             <Button
                 android:layout_width="fill_parent"
@@ -52,7 +53,7 @@
                 android:text="@string/lblExit"
                 android:id="@+id/btnExit"
                 android:layout_gravity="center_horizontal"
-                android:onClick="doLogout" />
+                android:onClick="doNavigation" />
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

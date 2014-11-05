@@ -6,7 +6,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.example.cackharot.geosnap.activities.NewSiteActivity;
 import com.example.cackharot.geosnap.lib.UserSessionManager;
 
 
@@ -50,9 +52,24 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void doNavigation(View target){
+        switch (target.getId()){
+            case R.id.btnExit:
+                onBackPressed();
+                break;
+            case R.id.btnNewSite:
+                navigate(NewSiteActivity.class);
+                break;
+        }
+    }
+
     @Override
     public void onBackPressed() {
-        navigate(LoginActivity.class);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void navigate(Class<?> activityClass) {

@@ -14,5 +14,6 @@
     <string name="lblUpload">Upload</string>
     <string name="lblViewSites">View Sites</string>
     <string name="lblNewSite">New Site</string>
+    <string name="title_activity_new_site">NewSiteActivity</string>
 
 </resources>
