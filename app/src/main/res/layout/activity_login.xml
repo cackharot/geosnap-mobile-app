@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="test"
+                android:text="john"
                 android:ems="10"
                 android:id="@+id/txtUsername"
                 android:layout_gravity="center_horizontal"
@@ -48,7 +48,7 @@
                 android:id="@+id/txtPassword"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
-                android:text="test" />
+                android:text="pass@123" />
 
             <Button
                 android:layout_width="fill_parent"

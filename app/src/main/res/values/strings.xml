@@ -2,8 +2,6 @@
 <resources>
 
     <string name="app_name">GeoSnap</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="login">Login</string>
     <string name="lbl_geosnap">GeoSnap</string>
     <string name="title_activity_home">HomeActivity</string>

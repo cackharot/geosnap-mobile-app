@@ -23,9 +23,7 @@ public class HomeActivity extends ActionBarActivity {
         _context = getApplicationContext();
         session = new UserSessionManager(_context);
 
-        if(!session.isUserLoggedIn()){
-            navigate(LoginActivity.class);
-        }
+        session.checkLogin();
 
         setContentView(R.layout.activity_home);
     }
@@ -65,10 +63,7 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        session.logoutUser();
         finish();
     }
 

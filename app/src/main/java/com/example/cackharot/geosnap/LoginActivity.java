@@ -37,7 +37,7 @@ public class LoginActivity extends Activity {
             navigate(HomeActivity.class);
         }
 
-        userService = new UserService();
+        userService = new UserService(getApplicationContext());
 
         setContentView(R.layout.activity_login);
 
