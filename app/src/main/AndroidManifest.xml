@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cackharot.geosnap" >
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -25,6 +25,10 @@
         <activity
             android:name="com.example.cackharot.geosnap.activities.NewSiteActivity"
             android:label="@string/title_activity_new_site" >
+        </activity>
+        <activity
+            android:name="com.example.cackharot.geosnap.activities.ListSiteActivity"
+            android:label="@string/title_activity_list_site" >
         </activity>
     </application>
 

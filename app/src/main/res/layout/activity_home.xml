@@ -31,21 +31,24 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnViewSites"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/lblViewSites" />
+                android:text="@string/lblViewSites"
+                android:onClick="doNavigation" />
 
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lblUpload"
                 android:id="@+id/btnUpload"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:onClick="doNavigation" />
 
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lblSettings"
                 android:id="@+id/btnSettings"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:onClick="doNavigation" />
 
             <Button
                 android:layout_width="fill_parent"

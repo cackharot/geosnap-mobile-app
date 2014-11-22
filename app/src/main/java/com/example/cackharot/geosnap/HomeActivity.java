@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.cackharot.geosnap.activities.ListSiteActivity;
 import com.example.cackharot.geosnap.activities.NewSiteActivity;
 import com.example.cackharot.geosnap.lib.UserSessionManager;
 
@@ -57,6 +58,9 @@ public class HomeActivity extends ActionBarActivity {
                 break;
             case R.id.btnNewSite:
                 navigate(NewSiteActivity.class);
+                break;
+            case R.id.btnViewSites:
+                navigate(ListSiteActivity.class);
                 break;
         }
     }

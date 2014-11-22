@@ -15,5 +15,6 @@
     <string name="title_activity_new_site">NewSiteActivity</string>
     <string name="Save">Save</string>
     <string name="TakePhoto">Take Photo</string>
+    <string name="title_activity_list_site">ListSiteActivity</string>
 
 </resources>
