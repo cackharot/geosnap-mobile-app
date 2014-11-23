@@ -16,22 +16,24 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public abstract class BaseService {
-    protected final String BaseUrl;
+    protected final URL BaseUrl;
 
-    protected BaseService(String baseUrl) {
-        this.BaseUrl = baseUrl;
+    protected BaseService(String baseUrl) throws MalformedURLException {
+        this.BaseUrl = new URL(baseUrl);
     }
 
-    protected void downloadJSONString(DownloadCallBack callback, String url) throws MalformedURLException {
-        HttpService httpService = new HttpService(callback);
-        httpService.execute(new URL(this.BaseUrl + url));
+    protected void downloadJSONString(IDownloadCallBack callback, Object innerCallback) {
+        HttpService httpService = new HttpService(callback, innerCallback);
+        httpService.execute(BaseUrl);
     }
 
     private class HttpService extends AsyncTask<URL, Void, String> {
-        private final DownloadCallBack downloadCallBack;
+        private final IDownloadCallBack downloadCallBack;
+        private final Object innerCallback;
 
-        public HttpService(DownloadCallBack callBack) {
+        public HttpService(IDownloadCallBack callBack, Object innerCallback) {
             this.downloadCallBack = callBack;
+            this.innerCallback = innerCallback;
         }
 
         @Override
@@ -61,7 +63,7 @@ public abstract class BaseService {
             super.onPostExecute(results);
             if (this.downloadCallBack == null)
                 return;
-            this.downloadCallBack.doPostExecute(results);
+            this.downloadCallBack.doPostExecute(results, innerCallback);
         }
 
         protected String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {

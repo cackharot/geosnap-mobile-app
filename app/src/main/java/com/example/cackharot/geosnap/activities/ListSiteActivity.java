@@ -16,7 +16,7 @@ public class ListSiteActivity extends ActionBarActivity implements ListSiteFragm
         setContentView(R.layout.activity_list_site);
 
         if (savedInstanceState == null) {
-            ListSiteFragment fragment = ListSiteFragment.newInstance("geo","snap");
+            ListSiteFragment fragment = new ListSiteFragment();
             fragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()

@@ -25,13 +25,13 @@ public class UserService implements IUserService {
         Integer count = this.repository.getUserCount();
         if(count == 0){
             User entity = new User();
-            entity.Name = "john";
-            entity.Password = "pass@123";
-            entity.Email = "john@example.com";
-            entity.SecurityQuestion = "What is you first pet name?";
-            entity.SecurityAnswer = "Tiger";
-            entity.CreatedDate = new Date();
-            entity.Status = true;
+            entity.name = "john";
+            entity.password = "pass@123";
+            entity.email = "john@example.com";
+            entity.security_question = "What is you first pet name?";
+            entity.security_answer = "Tiger";
+            entity.created_at = new Date();
+            entity.status = true;
             this.repository.Create(entity);
         }
     }

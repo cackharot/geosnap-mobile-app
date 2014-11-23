@@ -16,5 +16,6 @@
     <string name="Save">Save</string>
     <string name="TakePhoto">Take Photo</string>
     <string name="title_activity_list_site">ListSiteActivity</string>
+    <string name="NoData">No data</string>
 
 </resources>
