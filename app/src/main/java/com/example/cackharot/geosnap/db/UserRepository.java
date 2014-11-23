@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.cackharot.geosnap.lib.ConfigurationHelper;
 import com.example.cackharot.geosnap.model.User;
 
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -19,8 +21,8 @@ public class UserRepository {
         dbHelper = new GeoSnapSQLiteHelper(context);
     }
 
-    public UUID Create(User entity) {
-        entity._id = UUID.randomUUID();
+    public ObjectId Create(User entity) {
+        entity._id = ObjectId.get();
         ContentValues values = entity.getContentValues();
         SQLiteDatabase database = this.getWritableDatabase();
         database.insert(ConfigurationHelper.TABLE_USER, null, values);
@@ -28,7 +30,7 @@ public class UserRepository {
         return entity._id;
     }
 
-    public User GetUser(UUID id) {
+    public User GetUser(ObjectId id) {
         User entity = new User();
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.query(ConfigurationHelper.TABLE_USER,

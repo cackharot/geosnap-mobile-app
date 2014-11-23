@@ -5,5 +5,7 @@ import com.example.cackharot.geosnap.model.Site;
 import java.util.Collection;
 
 public interface ISiteDownloadCallback {
-    void doAfterDownload(Collection<Site> results);
+    void doAfterGetAll(Collection<Site> results);
+
+    void doAfterCreate(Site entity);
 }

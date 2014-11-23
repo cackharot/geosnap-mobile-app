@@ -3,11 +3,12 @@ package com.example.cackharot.geosnap.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import org.bson.types.ObjectId;
+
 import java.util.Date;
-import java.util.UUID;
 
 public class User implements java.io.Serializable, BaseModel {
-    public UUID _id;
+    public ObjectId _id;
     public String name;
     public String password;
     public String email;
@@ -15,6 +16,7 @@ public class User implements java.io.Serializable, BaseModel {
     public String security_answer;
     public Date created_at;
     public Boolean status;
+
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
         values.put("id", this._id.toString());
@@ -34,7 +36,7 @@ public class User implements java.io.Serializable, BaseModel {
 
     public void setEntity(Cursor cursor) {
         User entity = this;
-        entity._id = UUID.fromString(cursor.getString(0));
+        entity._id = new ObjectId(cursor.getString(0));
         entity.name = cursor.getString(1);
         entity.password = cursor.getString(2);
         entity.email = cursor.getString(3);
@@ -45,12 +47,12 @@ public class User implements java.io.Serializable, BaseModel {
     }
 
     @Override
-    public UUID getId() {
+    public ObjectId getId() {
         return _id;
     }
 
     @Override
-    public void setId(UUID uuid) {
+    public void setId(ObjectId uuid) {
         this._id = uuid;
     }
 

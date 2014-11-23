@@ -47,13 +47,18 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
 
 
     @Override
-    public void doAfterDownload(Collection<Site> results) {
+    public void doAfterGetAll(Collection<Site> results) {
         sites.clear();
         if (results != null && !results.isEmpty()) {
             sites.addAll(results);
         }
         mAdapter = new ArrayAdapter<Site>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, sites);
         mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void doAfterCreate(Site entity) {
+
     }
 
     @Override

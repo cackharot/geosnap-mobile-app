@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.cackharot.geosnap.model.BaseModel;
 
+import org.bson.types.ObjectId;
+
 import java.io.Closeable;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class BaseRepository<T extends BaseModel> implements Closeable {
 
@@ -21,9 +22,9 @@ public class BaseRepository<T extends BaseModel> implements Closeable {
         dbHelper = new GeoSnapSQLiteHelper(context);
     }
 
-    public UUID Create(T entity) {
+    public ObjectId Create(T entity) {
         if (entity.getId() == null)
-            entity.setId(UUID.randomUUID());
+            entity.setId(ObjectId.get());
         ContentValues values = entity.getContentValues();
         SQLiteDatabase database = this.getWritableDatabase();
         database.insert(tClass.getSimpleName(), null, values);
@@ -31,7 +32,16 @@ public class BaseRepository<T extends BaseModel> implements Closeable {
         return entity.getId();
     }
 
-    public T Get(UUID id) {
+    public void UpdateSync(T entity) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = entity.getContentValues();
+        database.update(tClass.getSimpleName(), values,
+                "id = ?",
+                new String[]{String.valueOf(entity.getId())});
+        this.close();
+    }
+
+    public T Get(ObjectId id) {
         T entity = getTInstance();
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.query(tClass.getSimpleName(),
@@ -44,17 +54,6 @@ public class BaseRepository<T extends BaseModel> implements Closeable {
         cursor.close();
         this.close();
         return entity;
-    }
-
-    private T getTInstance() {
-        try {
-            return tClass.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public ArrayList<T> GetAll() {
@@ -100,5 +99,16 @@ public class BaseRepository<T extends BaseModel> implements Closeable {
 
     private SQLiteDatabase getReadableDatabase() {
         return dbHelper.getReadableDatabase();
+    }
+
+    private T getTInstance() {
+        try {
+            return tClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

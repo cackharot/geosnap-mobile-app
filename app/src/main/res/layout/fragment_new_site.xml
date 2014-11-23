@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Site Name"
-                android:id="@+id/textView2" />
+                android:id="@+id/lblSiteName" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -35,8 +35,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Site Address"
+                android:id="@+id/lblSiteAddress" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtAddress"
+                android:inputType="text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Square Feet"
-                android:id="@+id/textView3" />
+                android:id="@+id/lblSqFt" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -49,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Consumption Expected"
-                android:id="@+id/textView4" />
+                android:id="@+id/lblConsumptionExpected" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -62,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Rebars Considered"
-                android:id="@+id/textView5" />
+                android:id="@+id/lblRebarsConsidered" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -74,8 +87,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="User Brand 1 Name"
-                android:id="@+id/textView6" />
+                android:text="Used Brand Name"
+                android:id="@+id/lblBrand1Name" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -87,39 +100,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="User Brand 1 Consumption (tons)"
-                android:id="@+id/textView7" />
+                android:text="Used Brand Consumption (tons)"
+                android:id="@+id/lblBrand1Consumption" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtBrand1Consumption"
-                android:inputType="numberDecimal|numberSigned" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="User Brand 2 Name"
-                android:id="@+id/textView8" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtBrand2Name"
-                android:inputType="text" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="User Brand 2 Consumption (tons)"
-                android:id="@+id/textView8" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtBrand2Consumption"
                 android:inputType="numberDecimal|numberSigned" />
 
             <LinearLayout

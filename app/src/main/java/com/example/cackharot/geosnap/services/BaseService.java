@@ -1,61 +1,83 @@
 package com.example.cackharot.geosnap.services;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.HashMap;
 
 public abstract class BaseService {
-    protected final URL BaseUrl;
-
-    protected BaseService(String baseUrl) throws MalformedURLException {
-        this.BaseUrl = new URL(baseUrl);
+    protected void doHttpRequest(String baseUrl, HashMap<String, String> queryArgs, String post_data,
+                                 IDownloadCallBack callback, Object innerCallback) {
+        Uri.Builder b = Uri.parse(baseUrl).buildUpon();
+        if (queryArgs != null && !queryArgs.isEmpty()) {
+            for (String key : queryArgs.keySet()) {
+                b.appendQueryParameter(key, queryArgs.get(key));
+            }
+        }
+        Uri url = b.build();
+        HttpService httpService = new HttpService(url, post_data, callback, innerCallback);
+        httpService.execute();
     }
 
-    protected void downloadJSONString(IDownloadCallBack callback, Object innerCallback) {
-        HttpService httpService = new HttpService(callback, innerCallback);
-        httpService.execute(BaseUrl);
-    }
-
-    private class HttpService extends AsyncTask<URL, Void, String> {
+    private class HttpService extends AsyncTask<Void, Void, String> {
         private final IDownloadCallBack downloadCallBack;
         private final Object innerCallback;
+        private HttpRequestBase httpRequest;
 
-        public HttpService(IDownloadCallBack callBack, Object innerCallback) {
+        public HttpService(Uri url, String jsonData, IDownloadCallBack callBack, Object innerCallback) {
             this.downloadCallBack = callBack;
             this.innerCallback = innerCallback;
+            if (jsonData == null || jsonData.isEmpty()) {
+                httpRequest = new HttpGet(url.toString());
+            } else {
+                StringEntity input = null;
+                try {
+                    input = new StringEntity(jsonData);
+                    input.setContentType("application/json;charset=UTF-8");
+                    input.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=UTF-8"));
+
+                    HttpPost postRequest = new HttpPost(url.toString());
+                    postRequest.setHeader("Accept", "application/json");
+                    postRequest.setEntity(input);
+
+                    httpRequest = postRequest;
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         @Override
-        protected String doInBackground(URL... urls) {
+        protected String doInBackground(Void... voids) {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
-            HttpGet httpGet = new HttpGet(urls[0].toString());
-            String text = null;
+            String content = null;
             try {
 
-                HttpResponse response = httpClient.execute(httpGet, localContext);
-
+                HttpResponse response = httpClient.execute(httpRequest, localContext);
                 HttpEntity entity = response.getEntity();
-
-                text = getASCIIContentFromEntity(entity);
-
+                content = getASCIIContentFromEntity(entity);
             } catch (Exception e) {
-                //return e.getLocalizedMessage();
                 e.printStackTrace();
-                return null;
             }
-            return text;
+            return content;
         }
 
         @Override

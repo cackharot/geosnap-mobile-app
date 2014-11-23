@@ -9,16 +9,18 @@ public class ConfigurationHelper {
 
     public static final String TABLE_USER = "User";
 
-    private static String USER_CREATE_SCRIPT = "CREATE TABLE User (id TEXT NOT NULL, name TEXT NOT NULL,"
-            + "password TEXT NOT NULL, email TEXT NULL, question TEXT NULL, answer TEXT NULL,"
-            + "created_at INTEGER NOT NULL, status INTEGER NOT NULL);\n";
-    private static final String USER_DROP_SCRIPT = "DROP TABLE IF EXISTS User;\n";
+    private static final String USER_CREATE_SCRIPT = "CREATE TABLE [User] (id VARCHAR NOT NULL, name VARCHAR NOT NULL,"
+            + "password VARCHAR NOT NULL, email TEXT NULL, question VARCHAR NULL, answer VARCHAR NULL,"
+            + "created_at INTEGER NOT NULL, status INTEGER NOT NULL);";
+    private static final String USER_DROP_SCRIPT = "DROP TABLE IF EXISTS User;";
 
 
-    private static String SITE_CREATE_SCRIPT = "CREATE TABLE Site (id TEXT NOT NULL, values TEXT NOT NULL, sync_status INTEGER NOT NULL);\n";
-    private static final String SITE_DROP_SCRIPT = "DROP TABLE IF EXISTS Site;\n";
+    private static final String SITE_CREATE_SCRIPT = "CREATE TABLE [Site] (id VARCHAR NOT NULL, json_data TEXT NOT NULL, sync_status INTEGER NOT NULL);";
+    private static final String SITE_DROP_SCRIPT = "DROP TABLE IF EXISTS Site;";
+
+
     public static final String DATABASE_NAME = "geoSnapDb.db";
-    public static final int DB_VERSION = 3;
-    public static final String DATABASE_CREATE_SCRIPT = USER_CREATE_SCRIPT + SITE_CREATE_SCRIPT;
-    public static final String DROP_TABLE_SCRIPT = USER_DROP_SCRIPT + SITE_DROP_SCRIPT;
+    public static final int DB_VERSION = 7;
+    public static final String[] DATABASE_CREATE_SCRIPT = new String[]{USER_CREATE_SCRIPT, SITE_CREATE_SCRIPT};
+    public static final String[] DROP_TABLE_SCRIPT = new String[]{USER_DROP_SCRIPT, SITE_DROP_SCRIPT};
 }
