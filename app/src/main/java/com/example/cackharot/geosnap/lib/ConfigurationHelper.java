@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ConfigurationHelper {
+    public static final int CAMERA_REQUEST = 1888;
     public static String BaseUrl = "http://192.168.2.10:5500/api";
     public static String SiteImageUrl = "http://192.168.2.10:5500/static/images/sites/";
 

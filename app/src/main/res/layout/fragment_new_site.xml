@@ -118,17 +118,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/TakePhoto"
-                    android:id="@+id/button2" />
+                    android:id="@+id/btnCapture" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Save"
                     android:id="@+id/btnSaveSite"
-                    android:layout_gravity="right"
-                    android:background="@android:color/holo_green_light" />
+                    android:layout_gravity="right" />
 
             </LinearLayout>
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="100dp"
+                android:id="@+id/imgSiteTmpImage"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitXY"/>
 
         </LinearLayout>
     </ScrollView>

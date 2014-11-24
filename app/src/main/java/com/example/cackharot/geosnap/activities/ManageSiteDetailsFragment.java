@@ -2,6 +2,8 @@ package com.example.cackharot.geosnap.activities;
 
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.app.AlertDialog;
 
 import com.example.cackharot.geosnap.HomeActivity;
 import com.example.cackharot.geosnap.R;
+import com.example.cackharot.geosnap.lib.ConfigurationHelper;
 import com.example.cackharot.geosnap.model.Brand;
 import com.example.cackharot.geosnap.model.Site;
 import com.example.cackharot.geosnap.services.ISiteDownloadCallback;
@@ -40,6 +45,8 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_new_site, container, false);
         Button btn = (Button) view.findViewById(R.id.btnSaveSite);
+        btn.setOnClickListener(this);
+        btn = (Button) view.findViewById(R.id.btnCapture);
         btn.setOnClickListener(this);
 
         Bundle extras = getArguments();
@@ -88,8 +95,12 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
 
     public void doSave() {
         Site entity = this.Model;
-        entity.district_id = new ObjectId("546ca00fb41d060ec8dcdf9f");
         entity.name = getTextValue(R.id.txtSiteName);
+
+        if(entity.name == null || entity.name.isEmpty())
+            return;
+
+        entity.district_id = new ObjectId("546ca00fb41d060ec8dcdf9f");
         entity.square_feet = Double.parseDouble(getTextValue(R.id.txtSqFt));
         entity.consumption = Double.parseDouble(getTextValue(R.id.txtConsumptionExcepted));
         entity.address = getTextValue(R.id.txtAddress);
@@ -142,6 +153,24 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
             case R.id.btnSaveSite:
                 doSave();
                 break;
+            case R.id.btnCapture:
+                doCapture();
+                break;
+        }
+    }
+
+    private void doCapture() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, ConfigurationHelper.CAMERA_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ConfigurationHelper.CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            ImageView imageView = ((ImageView) findViewById(R.id.imgSiteTmpImage));
+            imageView.setImageBitmap(photo);
         }
     }
 
