@@ -8,4 +8,6 @@ public interface ISiteDownloadCallback {
     void doAfterGetAll(Collection<Site> results);
 
     void doAfterCreate(Site entity);
+
+    void doAfterGet(Site item);
 }

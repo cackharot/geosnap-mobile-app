@@ -1,6 +1,7 @@
 package com.example.cackharot.geosnap.activities;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.cackharot.geosnap.HomeActivity;
 import com.example.cackharot.geosnap.R;
 import com.example.cackharot.geosnap.model.Brand;
 import com.example.cackharot.geosnap.model.Site;
@@ -24,9 +26,13 @@ import java.util.Collection;
 
 public class ManageSiteDetailsFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "ManageSiteDetailsFragment";
+    private SiteService siteService;
     private View view;
+    private OnManageSiteFragmentInteractionListener mListener;
+    private Site Model = new Site();
 
     public ManageSiteDetailsFragment() {
+        siteService = new SiteService(getActivity());
     }
 
     @Override
@@ -35,12 +41,54 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         view = inflater.inflate(R.layout.fragment_new_site, container, false);
         Button btn = (Button) view.findViewById(R.id.btnSaveSite);
         btn.setOnClickListener(this);
+
+        Bundle extras = getArguments();
+        if (extras != null) {
+            String site_id = extras.getString("site_id");
+            if (site_id != null && !site_id.isEmpty()) {
+                this.siteService.GetById(site_id, new ISiteDownloadCallback() {
+                    @Override
+                    public void doAfterGetAll(Collection<Site> results) {
+
+                    }
+
+                    @Override
+                    public void doAfterCreate(Site entity) {
+
+                    }
+
+                    @Override
+                    public void doAfterGet(Site item) {
+                        updateViewInputValues(item);
+                    }
+                });
+            }
+        }
+
         return view;
     }
 
+    private void updateViewInputValues(Site item) {
+        if (item == null) return;
+        this.Model = item;
+        getViewById(R.id.txtSiteName).setText(item.name);
+        getViewById(R.id.txtAddress).setText(item.address);
+        getViewById(R.id.txtSqFt).setText(String.valueOf(item.square_feet));
+        getViewById(R.id.txtConsumptionExcepted).setText(String.valueOf(item.consumption));
+        getViewById(R.id.txtRebarsConsidered).setText(item.rebars_considered);
+
+        if (item.used_brands != null && !item.used_brands.isEmpty()) {
+            for (Brand b : item.used_brands) {
+                getViewById(R.id.txtBrand1Name).setText(String.valueOf(b.name));
+                getViewById(R.id.txtBrand1Consumption).setText(String.valueOf(b.consumption));
+                break;
+            }
+        }
+    }
+
     public void doSave() {
-        Site entity = new Site();
-        entity.district_id = new ObjectId("547188cab41d06106c9e334a");
+        Site entity = this.Model;
+        entity.district_id = new ObjectId("546ca00fb41d060ec8dcdf9f");
         entity.name = getTextValue(R.id.txtSiteName);
         entity.square_feet = Double.parseDouble(getTextValue(R.id.txtSqFt));
         entity.consumption = Double.parseDouble(getTextValue(R.id.txtConsumptionExcepted));
@@ -55,28 +103,33 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         entity.location.latitude = 11.063;
         entity.location.longitude = 54.023;
 
-        try {
-            SiteService siteService = new SiteService(getActivity());
-            siteService.Create(entity, new ISiteDownloadCallback() {
-                @Override
-                public void doAfterGetAll(Collection<Site> results) {
+        SiteService siteService = new SiteService(getActivity());
+        siteService.Create(entity, new ISiteDownloadCallback() {
+            @Override
+            public void doAfterGetAll(Collection<Site> results) {
 
-                }
+            }
 
-                @Override
-                public void doAfterCreate(Site entity) {
-                    Log.e(TAG, "Saved Successfully!");
-                    Toast.makeText(getActivity(), "Saved Successfully!", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.getLocalizedMessage());
-        }
+            @Override
+            public void doAfterCreate(Site entity) {
+                Log.e(TAG, "Saved Successfully!");
+                Toast.makeText(getActivity(), "Saved Successfully!", Toast.LENGTH_SHORT).show();
+                mListener.doNavigate(HomeActivity.class);
+            }
+
+            @Override
+            public void doAfterGet(Site item) {
+
+            }
+        });
     }
 
     private String getTextValue(int txtId) {
-        return ((EditText) findViewById(txtId)).getText().toString();
+        return getViewById(txtId).getText().toString();
+    }
+
+    private EditText getViewById(int txtId) {
+        return ((EditText) findViewById(txtId));
     }
 
     private android.view.View findViewById(int controlId) {
@@ -90,5 +143,26 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
                 doSave();
                 break;
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnManageSiteFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnManageSiteFragmentInteractionListener {
+        public void doNavigate(Class<?> id);
     }
 }

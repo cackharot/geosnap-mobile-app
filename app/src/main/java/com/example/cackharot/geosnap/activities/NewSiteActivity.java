@@ -1,5 +1,8 @@
 package com.example.cackharot.geosnap.activities;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -11,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.cackharot.geosnap.R;
 
-public class NewSiteActivity extends ActionBarActivity {
+public class NewSiteActivity extends ActionBarActivity implements ManageSiteDetailsFragment.OnManageSiteFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,6 @@ public class NewSiteActivity extends ActionBarActivity {
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,5 +50,26 @@ public class NewSiteActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void doNavigate(Class<?> id) {
+        navigate(id);
+    }
+
+    private void navigate(Class<?> activityClass) {
+        // navigate to next activity
+        // user is not logged in redirect him to Login Activity
+        Context _context = getApplicationContext();
+        Intent i = new Intent(_context, activityClass);
+
+        // Closing all the Activities from stack
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Add new Flag to start new Activity
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Staring Login Activity
+        _context.startActivity(i);
     }
 }

@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +23,7 @@ public class SiteService extends BaseService {
     private Type siteArrayType = new TypeToken<Collection<Site>>() {
     }.getType();
 
-    public SiteService(Context context) throws MalformedURLException {
+    public SiteService(Context context) {
         this.repo = new BaseRepository<Site>(context, Site.class);
         this.gson = GsonHelper.getGson();
     }
@@ -45,11 +44,12 @@ public class SiteService extends BaseService {
             @Override
             public void doPostExecute(String results, Object innerCallback) {
                 ISiteDownloadCallback cb = (ISiteDownloadCallback) innerCallback;
-                if (results.isEmpty() || results.startsWith("<") || results.contains("Unauthorized")) {
+                if (results != null && (results.isEmpty() || results.startsWith("<")
+                        || results.contains("Unauthorized"))) {
                     cb.doAfterCreate(null);
                 }
                 entity.sync_status = true;
-                repo.UpdateSync(entity);
+                repo.Update(entity);
                 cb.doAfterCreate(entity);
             }
         }, callback);
@@ -60,14 +60,39 @@ public class SiteService extends BaseService {
             @Override
             public void doPostExecute(String results, Object innerCallback) {
                 ISiteDownloadCallback cb = (ISiteDownloadCallback) innerCallback;
-                if (results.isEmpty() || results.contains("Unauthorized")) {
+                if (results != null && (results.isEmpty() || results.contains("Unauthorized"))) {
                     cb.doAfterGetAll(null);
                 }
-                Collection<Site> lst = gson.fromJson(results, siteArrayType);
-                ArrayList<Site> dbSites = repo.GetAll();
-                lst.addAll(dbSites);
-                cb.doAfterGetAll(lst);
+                try {
+                    Collection<Site> lst = gson.fromJson(results, siteArrayType);
+                    ArrayList<Site> dbSites = repo.GetAll();
+                    lst.addAll(dbSites);
+                    cb.doAfterGetAll(lst);
+                } catch (Exception ignored) {
+                    Log.e("SiteService", ignored.getLocalizedMessage());
+                }
             }
         }, callBack);
+    }
+
+    public void GetById(String site_id, ISiteDownloadCallback callback) {
+        MessageFormat fmt = new MessageFormat(createUrl);
+        String url = fmt.format(new Object[]{site_id});
+
+        doHttpRequest(url, null, null, new IDownloadCallBack() {
+            @Override
+            public void doPostExecute(String results, Object innerCallback) {
+                ISiteDownloadCallback cb = (ISiteDownloadCallback) innerCallback;
+                if (results != null && (results.isEmpty() || results.contains("Unauthorized"))) {
+                    cb.doAfterGet(null);
+                }
+                try {
+                    Site item = gson.fromJson(results, Site.class);
+                    cb.doAfterGet(item);
+                } catch (Exception ignored) {
+                    Log.e("SiteService", ignored.getLocalizedMessage());
+                }
+            }
+        }, callback);
     }
 }

@@ -23,16 +23,19 @@ public class BaseRepository<T extends BaseModel> implements Closeable {
     }
 
     public ObjectId Create(T entity) {
-        if (entity.getId() == null)
+        if (entity.getId() == null) {
             entity.setId(ObjectId.get());
-        ContentValues values = entity.getContentValues();
-        SQLiteDatabase database = this.getWritableDatabase();
-        database.insert(tClass.getSimpleName(), null, values);
-        this.close();
+            ContentValues values = entity.getContentValues();
+            SQLiteDatabase database = this.getWritableDatabase();
+            database.insert(tClass.getSimpleName(), null, values);
+            this.close();
+        } else {
+            Update(entity);
+        }
         return entity.getId();
     }
 
-    public void UpdateSync(T entity) {
+    public void Update(T entity) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = entity.getContentValues();
         database.update(tClass.getSimpleName(), values,
@@ -88,9 +91,7 @@ public class BaseRepository<T extends BaseModel> implements Closeable {
     }
 
     public void close() {
-        if (dbHelper != null) {
-            dbHelper.close();
-        }
+        dbHelper.close();
     }
 
     private SQLiteDatabase getWritableDatabase() {

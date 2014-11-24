@@ -13,6 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.example.cackharot.geosnap.R;
+import com.example.cackharot.geosnap.lib.SiteArrayAdapter;
 import com.example.cackharot.geosnap.model.Site;
 import com.example.cackharot.geosnap.services.ISiteDownloadCallback;
 import com.example.cackharot.geosnap.services.SiteService;
@@ -22,9 +23,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ListSiteFragment extends Fragment implements AbsListView.OnItemClickListener, ISiteDownloadCallback {
-    private OnFragmentInteractionListener mListener;
+    private OnListSiteFragmentInteractionListener mListener;
     private AbsListView mListView;
-    private ListAdapter mAdapter;
+    private SiteArrayAdapter mAdapter;
     private ArrayList<Site> sites;
 
 
@@ -35,14 +36,10 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sites = new ArrayList<Site>();
-        mAdapter = new ArrayAdapter<Site>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, sites);
+        mAdapter = new SiteArrayAdapter(getActivity(), R.layout.site_row_item, sites);
 
-        try {
-            SiteService siteService = new SiteService(getActivity());
-            siteService.GetAll(this);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        SiteService siteService = new SiteService(getActivity());
+        siteService.GetAll(this);
     }
 
 
@@ -52,12 +49,17 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
         if (results != null && !results.isEmpty()) {
             sites.addAll(results);
         }
-        mAdapter = new ArrayAdapter<Site>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, sites);
+        mAdapter = new SiteArrayAdapter(getActivity(), R.layout.site_row_item, sites);
         mListView.setAdapter(mAdapter);
     }
 
     @Override
     public void doAfterCreate(Site entity) {
+
+    }
+
+    @Override
+    public void doAfterGet(Site item) {
 
     }
 
@@ -80,7 +82,7 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnListSiteFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -99,7 +101,7 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onSelectSite(NewSiteActivity.class, sites.get(position).getId().toString());
         }
     }
 
@@ -116,7 +118,7 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
         }
     }
 
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
+    public interface OnListSiteFragmentInteractionListener {
+        public void onSelectSite(Class<?> id, String site_id);
     }
 }
