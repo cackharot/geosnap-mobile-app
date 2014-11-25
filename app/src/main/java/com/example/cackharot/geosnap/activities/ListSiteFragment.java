@@ -1,6 +1,7 @@
 package com.example.cackharot.geosnap.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class ListSiteFragment extends Fragment implements AbsListView.OnItemClickListener, ISiteDownloadCallback {
+public class ListSiteFragment extends Fragment implements AbsListView.OnItemClickListener {
     private OnListSiteFragmentInteractionListener mListener;
     private AbsListView mListView;
     private SiteArrayAdapter mAdapter;
@@ -38,29 +39,34 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
         sites = new ArrayList<Site>();
         mAdapter = new SiteArrayAdapter(getActivity(), R.layout.site_row_item, sites);
 
+        final ProgressDialog dialog = ProgressDialog.show(getActivity(),
+                "Please wait ...",
+                "Loading data from server...", true);
+        dialog.setCancelable(false);
+        dialog.show();
         SiteService siteService = new SiteService(getActivity());
-        siteService.GetAll(this);
-    }
+        siteService.GetAll(new ISiteDownloadCallback() {
+            @Override
+            public void doAfterGetAll(Collection<Site> results) {
+                sites.clear();
+                if (results != null && !results.isEmpty()) {
+                    sites.addAll(results);
+                }
+                mAdapter = new SiteArrayAdapter(getActivity(), R.layout.site_row_item, sites);
+                mListView.setAdapter(mAdapter);
+                dialog.dismiss();
+            }
 
+            @Override
+            public void doAfterCreate(Site entity) {
 
-    @Override
-    public void doAfterGetAll(Collection<Site> results) {
-        sites.clear();
-        if (results != null && !results.isEmpty()) {
-            sites.addAll(results);
-        }
-        mAdapter = new SiteArrayAdapter(getActivity(), R.layout.site_row_item, sites);
-        mListView.setAdapter(mAdapter);
-    }
+            }
 
-    @Override
-    public void doAfterCreate(Site entity) {
+            @Override
+            public void doAfterGet(Site item) {
 
-    }
-
-    @Override
-    public void doAfterGet(Site item) {
-
+            }
+        });
     }
 
     @Override

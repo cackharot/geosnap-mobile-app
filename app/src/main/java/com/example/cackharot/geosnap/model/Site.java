@@ -21,16 +21,17 @@ public class Site implements BaseModel {
     public String address;
     public String rebars_considered;
     public Date created_at;
-    public ArrayList<String> photos;
     public Boolean status;
-    public Location location;
     public Boolean sync_status;
     public double square_feet;
+    public Location location;
+    public ArrayList<String> photos;
     public ArrayList<Brand> used_brands;
 
     public Site() {
         this.location = new Location();
         this.used_brands = new ArrayList<Brand>();
+        this.photos = new ArrayList<String>();
     }
 
     public ContentValues getContentValues() {

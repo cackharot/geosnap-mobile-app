@@ -65,8 +65,8 @@ public class SiteService extends BaseService {
                 }
                 try {
                     Collection<Site> lst = gson.fromJson(results, siteArrayType);
-                    ArrayList<Site> dbSites = repo.GetAll();
-                    lst.addAll(dbSites);
+                    //ArrayList<Site> dbSites = repo.GetAll();
+                    //lst.addAll(dbSites);
                     cb.doAfterGetAll(lst);
                 } catch (Exception ignored) {
                     Log.e("SiteService", ignored.getLocalizedMessage());
