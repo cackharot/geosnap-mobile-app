@@ -37,7 +37,7 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     private final HashMap<String, List<String>> mapDistrictCenters = new HashMap<String, List<String>>();
     private final HashMap<String, List<String>> mapCenterDealers = new HashMap<String, List<String>>();
     private ArrayList<Distributor> distributorCollection;
-    private UserSessionManager sessionManager;
+    private UserSessionManager session;
 
 
     @Override
@@ -45,10 +45,11 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_distributor);
 
-        sessionManager = new UserSessionManager(getApplication());
+        session = new UserSessionManager(getApplication());
 
-        if (sessionManager.getDefaultsValues()[0] != null)
+        if (session.isUserLoggedIn() && session.getDefaultsValues()[0] != null) {
             navigate(HomeActivity.class);
+        }
 
         spDistributor = (Spinner) findViewById(R.id.spinnerDistributor);
         spDistrict = (Spinner) findViewById(R.id.spinnerDistrict);
@@ -163,6 +164,7 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
 
         // Staring Login Activity
         _context.startActivity(i);
+        finish();
     }
 
     @Override
@@ -205,7 +207,7 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         String center = (String) spConsumptionCenter.getSelectedItem();
         String dealer = (String) spDealer.getSelectedItem();
 
-        sessionManager.setDefaultsValues(distributor, district, center, dealer);
+        session.setDefaultsValues(distributor, district, center, dealer);
 
         navigate(HomeActivity.class);
     }
