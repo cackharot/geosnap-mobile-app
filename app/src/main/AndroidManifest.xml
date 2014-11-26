@@ -34,6 +34,10 @@
             android:name="com.example.cackharot.geosnap.activities.ListSiteActivity"
             android:label="@string/title_activity_list_site" >
         </activity>
+        <activity
+            android:name="com.example.cackharot.geosnap.activities.ChooseDistributorActivity"
+            android:label="@string/title_activity_choose_distributor" >
+        </activity>
     </application>
 
 </manifest>

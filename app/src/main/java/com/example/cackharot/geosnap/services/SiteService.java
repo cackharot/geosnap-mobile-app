@@ -12,10 +12,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 
-public class SiteService extends BaseService {
+public class SiteService extends BaseService<Site> {
     private static final String fetchUrl = ConfigurationHelper.BaseUrl + "/sites?api_key=" + ConfigurationHelper.Api_key;
     private static final String createUrl = ConfigurationHelper.BaseUrl + "/site/{0}?api_key=" + ConfigurationHelper.Api_key;
     private final BaseRepository<Site> repo;
@@ -28,11 +27,11 @@ public class SiteService extends BaseService {
         this.gson = GsonHelper.getGson();
     }
 
-    public void GetAll(ISiteDownloadCallback callBack) {
+    public void GetAll(IEntityDownloadCallback<Site> callBack) {
         downloadSiteObjects(callBack);
     }
 
-    public void Create(final Site entity, ISiteDownloadCallback callback) {
+    public void Create(final Site entity, IEntityDownloadCallback<Site> callback) {
         entity.sync_status = false;
         this.repo.Create(entity);
         String jsonData = gson.toJson(entity);
@@ -40,34 +39,32 @@ public class SiteService extends BaseService {
         MessageFormat fmt = new MessageFormat(createUrl);
         String url = fmt.format(new Object[]{entity.getId().toString()});
 
-        doHttpRequest(url, null, jsonData, new IDownloadCallBack() {
+        doHttpRequest(url, null, jsonData, new IDownloadCallBack<Site>() {
             @Override
-            public void doPostExecute(String results, Object innerCallback) {
-                ISiteDownloadCallback cb = (ISiteDownloadCallback) innerCallback;
+            public void doPostExecute(String results, IEntityDownloadCallback<Site> innerCallback) {
                 if (results != null && (results.isEmpty() || results.startsWith("<")
                         || results.contains("Unauthorized"))) {
-                    cb.doAfterCreate(null);
+                    innerCallback.doAfterCreate(null);
                 }
                 entity.sync_status = true;
                 repo.Update(entity);
-                cb.doAfterCreate(entity);
+                innerCallback.doAfterCreate(entity);
             }
         }, callback);
     }
 
-    private void downloadSiteObjects(ISiteDownloadCallback callBack) {
-        doHttpRequest(fetchUrl, null, null, new IDownloadCallBack() {
+    private void downloadSiteObjects(IEntityDownloadCallback<Site> callBack) {
+        doHttpRequest(fetchUrl, null, null, new IDownloadCallBack<Site>() {
             @Override
-            public void doPostExecute(String results, Object innerCallback) {
-                ISiteDownloadCallback cb = (ISiteDownloadCallback) innerCallback;
+            public void doPostExecute(String results, IEntityDownloadCallback<Site> innerCallback) {
                 if (results != null && (results.isEmpty() || results.contains("Unauthorized"))) {
-                    cb.doAfterGetAll(null);
+                    innerCallback.doAfterGetAll(null);
                 }
                 try {
                     Collection<Site> lst = gson.fromJson(results, siteArrayType);
                     //ArrayList<Site> dbSites = repo.GetAll();
                     //lst.addAll(dbSites);
-                    cb.doAfterGetAll(lst);
+                    innerCallback.doAfterGetAll(lst);
                 } catch (Exception ignored) {
                     Log.e("SiteService", ignored.getLocalizedMessage());
                 }
@@ -75,20 +72,19 @@ public class SiteService extends BaseService {
         }, callBack);
     }
 
-    public void GetById(String site_id, ISiteDownloadCallback callback) {
+    public void GetById(String site_id, IEntityDownloadCallback<Site> callback) {
         MessageFormat fmt = new MessageFormat(createUrl);
         String url = fmt.format(new Object[]{site_id});
 
-        doHttpRequest(url, null, null, new IDownloadCallBack() {
+        doHttpRequest(url, null, null, new IDownloadCallBack<Site>() {
             @Override
-            public void doPostExecute(String results, Object innerCallback) {
-                ISiteDownloadCallback cb = (ISiteDownloadCallback) innerCallback;
+            public void doPostExecute(String results, IEntityDownloadCallback<Site> innerCallback) {
                 if (results != null && (results.isEmpty() || results.contains("Unauthorized"))) {
-                    cb.doAfterGet(null);
+                    innerCallback.doAfterGet(null);
                 }
                 try {
                     Site item = gson.fromJson(results, Site.class);
-                    cb.doAfterGet(item);
+                    innerCallback.doAfterGet(item);
                 } catch (Exception ignored) {
                     Log.e("SiteService", ignored.getLocalizedMessage());
                 }

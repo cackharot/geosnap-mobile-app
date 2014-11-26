@@ -9,17 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.example.cackharot.geosnap.R;
 import com.example.cackharot.geosnap.lib.SiteArrayAdapter;
 import com.example.cackharot.geosnap.model.Site;
-import com.example.cackharot.geosnap.services.ISiteDownloadCallback;
+import com.example.cackharot.geosnap.services.IEntityDownloadCallback;
 import com.example.cackharot.geosnap.services.SiteService;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -45,7 +42,7 @@ public class ListSiteFragment extends Fragment implements AbsListView.OnItemClic
         dialog.setCancelable(false);
         dialog.show();
         SiteService siteService = new SiteService(getActivity());
-        siteService.GetAll(new ISiteDownloadCallback() {
+        siteService.GetAll(new IEntityDownloadCallback<Site>() {
             @Override
             public void doAfterGetAll(Collection<Site> results) {
                 sites.clear();

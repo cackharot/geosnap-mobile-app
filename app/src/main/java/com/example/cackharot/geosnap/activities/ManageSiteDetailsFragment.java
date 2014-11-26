@@ -26,7 +26,7 @@ import com.example.cackharot.geosnap.lib.Helpers;
 import com.example.cackharot.geosnap.lib.UploadTask;
 import com.example.cackharot.geosnap.model.Brand;
 import com.example.cackharot.geosnap.model.Site;
-import com.example.cackharot.geosnap.services.ISiteDownloadCallback;
+import com.example.cackharot.geosnap.services.IEntityDownloadCallback;
 import com.example.cackharot.geosnap.services.SiteService;
 
 import org.bson.types.ObjectId;
@@ -72,7 +72,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
                 dialog.setCancelable(false);
                 dialog.show();
                 SiteService siteService = new SiteService(getActivity());
-                siteService.GetById(site_id, new ISiteDownloadCallback() {
+                siteService.GetById(site_id, new IEntityDownloadCallback<Site>() {
                     @Override
                     public void doAfterGetAll(Collection<Site> results) {
 
@@ -141,7 +141,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         dialog.setCancelable(false);
         dialog.show();
 
-        ISiteDownloadCallback callback = new ISiteDownloadCallback() {
+        IEntityDownloadCallback<Site> callback = new IEntityDownloadCallback<Site>() {
             @Override
             public void doAfterGetAll(Collection<Site> results) {
 
@@ -194,7 +194,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         return true;
     }
 
-    public void doSaveSiteDetails(ISiteDownloadCallback callback) {
+    public void doSaveSiteDetails(IEntityDownloadCallback<Site> callback) {
         SiteService siteService = new SiteService(getActivity());
         siteService.Create(this.Model, callback);
     }
@@ -253,6 +253,20 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         }
     }
 
+    private void sendPhoto(ArrayList<Bitmap> bitmap, final IEntityDownloadCallback<Site> callback) throws Exception {
+        new UploadTask(ConfigurationHelper.SiteImageUploadUrl, new UploadTask.IUploadComplete() {
+            @Override
+            public void complete(List<String> lst) {
+                if (lst != null && !lst.isEmpty()) {
+                    if (Model.photos == null)
+                        Model.photos = new ArrayList<String>();
+                    Model.photos.addAll(lst);
+                }
+                doSaveSiteDetails(callback);
+            }
+        }).execute(bitmap);
+    }
+
     private String saveToFile(Bitmap photo) {
         if (!Helpers.isExternalStorageWritable())
             return "tempfile.jpg";
@@ -267,20 +281,6 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
             e.printStackTrace();
         }
         return "tempfile.jpg";
-    }
-
-    private void sendPhoto(ArrayList<Bitmap> bitmap, final ISiteDownloadCallback callback) throws Exception {
-        new UploadTask(ConfigurationHelper.SiteImageUploadUrl, new UploadTask.IUploadComplete() {
-            @Override
-            public void complete(List<String> lst) {
-                if (lst != null && !lst.isEmpty()) {
-                    if (Model.photos == null)
-                        Model.photos = new ArrayList<String>();
-                    Model.photos.addAll(lst);
-                }
-                doSaveSiteDetails(callback);
-            }
-        }).execute(bitmap);
     }
 
     @Override

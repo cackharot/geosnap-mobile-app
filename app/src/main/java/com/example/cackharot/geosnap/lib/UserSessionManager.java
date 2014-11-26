@@ -1,6 +1,7 @@
 package com.example.cackharot.geosnap.lib;
 
 import java.util.HashMap;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -120,5 +121,22 @@ public class UserSessionManager {
     // Check for login
     public boolean isUserLoggedIn() {
         return pref.getBoolean(IS_USER_LOGIN, false);
+    }
+
+    public void setDefaultsValues(String distributor, String district, String center, String dealer) {
+        editor.putString("default_distributor", distributor);
+        editor.putString("default_district", district);
+        editor.putString("default_center", center);
+        editor.putString("default_dealer", dealer);
+        editor.commit();
+    }
+
+    public String[] getDefaultsValues() {
+        String[] args = new String[4];
+        args[0] = pref.getString("default_distributor", null);
+        args[1] = pref.getString("default_district", null);
+        args[2] = pref.getString("default_center", null);
+        args[3] = pref.getString("default_dealer", null);
+        return args;
     }
 }

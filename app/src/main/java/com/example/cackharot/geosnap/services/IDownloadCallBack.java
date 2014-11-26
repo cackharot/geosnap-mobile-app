@@ -1,5 +1,7 @@
 package com.example.cackharot.geosnap.services;
 
-public interface IDownloadCallBack {
-    void doPostExecute(String results, Object innerCallback);
+import com.example.cackharot.geosnap.model.BaseModel;
+
+public interface IDownloadCallBack<T> {
+    void doPostExecute(String results, IEntityDownloadCallback<T> innerCallback);
 }

@@ -1,5 +1,6 @@
 package com.example.cackharot.geosnap;
 
+import com.example.cackharot.geosnap.activities.ChooseDistributorActivity;
 import com.example.cackharot.geosnap.contract.IUserService;
 import com.example.cackharot.geosnap.lib.UserSessionManager;
 import com.example.cackharot.geosnap.services.UserService;
@@ -34,7 +35,8 @@ public class LoginActivity extends Activity {
         session = new UserSessionManager(_context);
 
         if(session.isUserLoggedIn()){
-            navigate(HomeActivity.class);
+            //navigate(HomeActivity.class);
+            navigate(ChooseDistributorActivity.class);
         }
 
         userService = new UserService(getApplicationContext());
@@ -71,7 +73,7 @@ public class LoginActivity extends Activity {
         if (userService.validateUser(userName, password)) {
             //store in session
             session.createUserLoginSession(userName, userName);
-            navigate(HomeActivity.class);
+            navigate(ChooseDistributorActivity.class);
         } else {
             // show error dialog
             Toast.makeText(getApplicationContext(), "Username/Password is incorrect", Toast.LENGTH_LONG).show();

@@ -3,8 +3,11 @@ package com.example.cackharot.geosnap.services;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.example.cackharot.geosnap.model.BaseModel;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -22,9 +25,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
-public abstract class BaseService {
+public abstract class BaseService<T> {
     protected void doHttpRequest(String baseUrl, HashMap<String, String> queryArgs, String post_data,
-                                 IDownloadCallBack callback, Object innerCallback) {
+                                 IDownloadCallBack<T> callback, IEntityDownloadCallback<T> innerCallback) {
         Uri.Builder b = Uri.parse(baseUrl).buildUpon();
         if (queryArgs != null && !queryArgs.isEmpty()) {
             for (String key : queryArgs.keySet()) {
@@ -37,11 +40,11 @@ public abstract class BaseService {
     }
 
     private class HttpService extends AsyncTask<Void, Void, String> {
-        private final IDownloadCallBack downloadCallBack;
-        private final Object innerCallback;
+        private final IDownloadCallBack<T> downloadCallBack;
+        private final IEntityDownloadCallback<T> innerCallback;
         private HttpRequestBase httpRequest;
 
-        public HttpService(Uri url, String jsonData, IDownloadCallBack callBack, Object innerCallback) {
+        public HttpService(Uri url, String jsonData, IDownloadCallBack<T> callBack, IEntityDownloadCallback<T> innerCallback) {
             this.downloadCallBack = callBack;
             this.innerCallback = innerCallback;
             if (jsonData == null || jsonData.isEmpty()) {
@@ -72,8 +75,13 @@ public abstract class BaseService {
             try {
 
                 HttpResponse response = httpClient.execute(httpRequest, localContext);
-                HttpEntity entity = response.getEntity();
-                content = getASCIIContentFromEntity(entity);
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == HttpStatus.SC_OK
+                        || statusCode == HttpStatus.SC_NO_CONTENT
+                        || statusCode == HttpStatus.SC_CREATED) {
+                    HttpEntity entity = response.getEntity();
+                    content = getASCIIContentFromEntity(entity);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
