@@ -14,7 +14,9 @@ import android.widget.Spinner;
 
 import com.example.cackharot.geosnap.HomeActivity;
 import com.example.cackharot.geosnap.R;
+import com.example.cackharot.geosnap.lib.SpinnerAdapter;
 import com.example.cackharot.geosnap.lib.UserSessionManager;
+import com.example.cackharot.geosnap.model.BaseModel;
 import com.example.cackharot.geosnap.model.Dealer;
 import com.example.cackharot.geosnap.model.Distributor;
 import com.example.cackharot.geosnap.model.District;
@@ -75,9 +77,8 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
 
                 updateModels(results);
 
-                ArrayList<String> distributorNames = new ArrayList<String>(mapDistributorsDistrict.keySet());
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplication(),
-                        R.layout.my_spinner_item, distributorNames);
+                //ArrayList<String> distributorNames = new ArrayList<String>(mapDistributorsDistrict.keySet());
+                SpinnerAdapter adapter = new SpinnerAdapter(getApplication(), R.layout.my_spinner_item, new ArrayList<BaseModel>(results));
                 spDistributor.setAdapter(adapter);
                 dialog.dismiss();
             }
@@ -169,19 +170,14 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()) {
             case R.id.spinnerDistributor:
-                String distributorName = (String) adapterView.getItemAtPosition(i);
+                String distributorName = ((Distributor) adapterView.getItemAtPosition(i)).name;
                 List<District> districts = mapDistributorsDistrict.get(distributorName);
-                ArrayList<String> districtNames = new ArrayList<String>();
-                for (District d : districts) {
-                    districtNames.add(d.name);
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplication(),
-                        R.layout.my_spinner_item, districtNames);
+                SpinnerAdapter adapter = new SpinnerAdapter(getApplication(), R.layout.my_spinner_item, new ArrayList<BaseModel>(districts));
                 spDistrict.setAdapter(adapter);
                 break;
             case R.id.spinnerDistrict:
-                String districtName = (String) adapterView.getItemAtPosition(i);
-                String dName = (String) spDistributor.getSelectedItem();
+                String districtName = ((District) adapterView.getItemAtPosition(i)).name;
+                String dName = ((Distributor) spDistributor.getSelectedItem()).name;
                 List<String> centers = mapDistrictCenters.get(dName + districtName);
                 ArrayAdapter<String> centerAdapter = new ArrayAdapter<String>(getApplication(),
                         R.layout.my_spinner_item, centers);
@@ -189,8 +185,8 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
                 break;
             case R.id.spinnerConsumptionCenter:
                 String centerName = (String) adapterView.getItemAtPosition(i);
-                String drName = (String) spDistributor.getSelectedItem();
-                String dsName = (String) spDistrict.getSelectedItem();
+                String drName = ((Distributor) spDistributor.getSelectedItem()).name;
+                String dsName = ((District) spDistrict.getSelectedItem()).name;
                 List<String> dealers = mapCenterDealers.get(drName + dsName + centerName);
                 ArrayAdapter<String> dealerAdapter = new ArrayAdapter<String>(getApplication(),
                         R.layout.my_spinner_item, dealers);
@@ -200,8 +196,8 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     }
 
     public void doContinue(View view) {
-        String distributor = (String) spDistributor.getSelectedItem();
-        String district = (String) spDistrict.getSelectedItem();
+        String distributor = ((Distributor) spDistributor.getSelectedItem()).name;
+        String district = ((District) spDistrict.getSelectedItem()).name;
         String center = (String) spConsumptionCenter.getSelectedItem();
         String dealer = (String) spDealer.getSelectedItem();
 

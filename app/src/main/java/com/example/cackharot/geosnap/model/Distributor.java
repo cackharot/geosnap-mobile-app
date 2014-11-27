@@ -39,4 +39,9 @@ public class Distributor implements BaseModel {
     public void setId(ObjectId uuid) {
         _id = uuid;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

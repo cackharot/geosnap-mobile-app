@@ -11,4 +11,9 @@ public class Brand {
         this.name = name;
         this.consumption = consumption;
     }
+
+    @Override
+     public String toString() {
+        return this.name;
+    }
 }
