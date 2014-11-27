@@ -32,11 +32,9 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     private Spinner spDistrict;
     private Spinner spConsumptionCenter;
     private Spinner spDealer;
-    private DistributorService distributorService;
     private final HashMap<String, List<District>> mapDistributorsDistrict = new HashMap<String, List<District>>();
     private final HashMap<String, List<String>> mapDistrictCenters = new HashMap<String, List<String>>();
     private final HashMap<String, List<String>> mapCenterDealers = new HashMap<String, List<String>>();
-    private ArrayList<Distributor> distributorCollection;
     private UserSessionManager session;
 
 
@@ -45,11 +43,11 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_distributor);
 
-        session = new UserSessionManager(getApplication());
+        session = new UserSessionManager(getApplicationContext());
 
-        if (session.isUserLoggedIn() && session.getDefaultsValues()[0] != null) {
-            navigate(HomeActivity.class);
-        }
+//        if (session.isUserLoggedIn() && session.getDefaultsValues()[0] != null) {
+//            navigate(HomeActivity.class);
+//        }
 
         spDistributor = (Spinner) findViewById(R.id.spinnerDistributor);
         spDistrict = (Spinner) findViewById(R.id.spinnerDistrict);
@@ -61,7 +59,7 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         spConsumptionCenter.setOnItemSelectedListener(this);
         spDealer.setOnItemSelectedListener(this);
 
-        distributorService = new DistributorService(getApplication());
+        DistributorService distributorService = new DistributorService(getApplication());
 
         final ProgressDialog dialog = ProgressDialog.show(this,
                 "Please wait ...",
@@ -97,7 +95,7 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     }
 
     private void updateModels(Collection<Distributor> results) {
-        distributorCollection = new ArrayList<Distributor>(results);
+        ArrayList<Distributor> distributorCollection = new ArrayList<Distributor>(results);
 
         for (Distributor item : distributorCollection) {
             if (item.districts == null)

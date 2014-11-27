@@ -1,18 +1,24 @@
 package com.example.cackharot.geosnap;
 
 import com.example.cackharot.geosnap.activities.ChooseDistributorActivity;
+import com.example.cackharot.geosnap.contract.ILoginCallback;
 import com.example.cackharot.geosnap.contract.IUserService;
 import com.example.cackharot.geosnap.lib.UserSessionManager;
+import com.example.cackharot.geosnap.model.User;
+import com.example.cackharot.geosnap.services.IEntityDownloadCallback;
 import com.example.cackharot.geosnap.services.UserService;
 import com.example.cackharot.geosnap.util.SystemUiHider;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Collection;
 
 
 /**
@@ -34,18 +40,13 @@ public class LoginActivity extends Activity {
         _context = getApplicationContext();
         session = new UserSessionManager(_context);
 
-        if(session.isUserLoggedIn()){
+        if (session.isUserLoggedIn()) {
             //navigate(HomeActivity.class);
             navigate(ChooseDistributorActivity.class);
         }
 
-        userService = new UserService(getApplicationContext());
-
+        userService = new UserService(_context);
         setContentView(R.layout.activity_login);
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
         findViewById(R.id.btnLogin).setOnClickListener(doLogin);
     }
 
@@ -54,12 +55,6 @@ public class LoginActivity extends Activity {
         super.onPostCreate(savedInstanceState);
     }
 
-
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
     View.OnClickListener doLogin = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -69,15 +64,46 @@ public class LoginActivity extends Activity {
         }
     };
 
-    private void validateUser(String userName, String password) {
-        if (userService.validateUser(userName, password)) {
-            //store in session
-            session.createUserLoginSession(userName, userName);
-            navigate(ChooseDistributorActivity.class);
-        } else {
-            // show error dialog
-            Toast.makeText(getApplicationContext(), "Username/Password is incorrect", Toast.LENGTH_LONG).show();
-        }
+    private void validateUser(final String email, final String password) {
+        final ProgressDialog dialog = ProgressDialog.show(this,
+                "Please wait ...",
+                "Authenticating...", true);
+        dialog.setCancelable(false);
+        dialog.show();
+        userService.ValidateUser(email, password, new ILoginCallback() {
+            @Override
+            public void onValidate(boolean isValid) {
+                if (isValid) {
+                    userService.GetUserByEmail(email, new IEntityDownloadCallback<User>() {
+                        @Override
+                        public void doAfterGetAll(Collection<User> results) {
+
+                        }
+
+                        @Override
+                        public void doAfterCreate(User entity) {
+
+                        }
+
+                        @Override
+                        public void doAfterGet(User item) {
+                            if (item != null) {
+                                session.createUserLoginSession(item);
+                                navigate(ChooseDistributorActivity.class);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Username/Password is incorrect", Toast.LENGTH_LONG).show();
+                                session.clear();
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Username/Password is incorrect", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                    session.clear();
+                }
+            }
+        });
     }
 
     private void navigate(Class<?> activityClass) {

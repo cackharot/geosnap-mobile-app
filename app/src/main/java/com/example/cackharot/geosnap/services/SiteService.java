@@ -15,14 +15,15 @@ import java.text.MessageFormat;
 import java.util.Collection;
 
 public class SiteService extends BaseService<Site> {
-    private static final String fetchUrl = ConfigurationHelper.BaseUrl + "/sites?api_key=" + ConfigurationHelper.Api_key;
-    private static final String createUrl = ConfigurationHelper.BaseUrl + "/site/{0}?api_key=" + ConfigurationHelper.Api_key;
+    private static final String fetchUrl = ConfigurationHelper.BaseUrl + "/sites";
+    private static final String createUrl = ConfigurationHelper.BaseUrl + "/site/{0}";
     private final BaseRepository<Site> repo;
     private final Gson gson;
     private Type siteArrayType = new TypeToken<Collection<Site>>() {
     }.getType();
 
     public SiteService(Context context) {
+        super(context);
         this.repo = new BaseRepository<Site>(context, Site.class);
         this.gson = GsonHelper.getGson();
     }
@@ -42,8 +43,7 @@ public class SiteService extends BaseService<Site> {
         doHttpRequest(url, null, jsonData, new IDownloadCallBack<Site>() {
             @Override
             public void doPostExecute(String results, IEntityDownloadCallback<Site> innerCallback) {
-                if (results != null && (results.isEmpty() || results.startsWith("<")
-                        || results.contains("Unauthorized"))) {
+                if (results == null) {
                     innerCallback.doAfterCreate(null);
                 }
                 entity.sync_status = true;
@@ -57,7 +57,7 @@ public class SiteService extends BaseService<Site> {
         doHttpRequest(fetchUrl, null, null, new IDownloadCallBack<Site>() {
             @Override
             public void doPostExecute(String results, IEntityDownloadCallback<Site> innerCallback) {
-                if (results != null && (results.isEmpty() || results.contains("Unauthorized"))) {
+                if (results == null) {
                     innerCallback.doAfterGetAll(null);
                 }
                 try {
@@ -79,7 +79,7 @@ public class SiteService extends BaseService<Site> {
         doHttpRequest(url, null, null, new IDownloadCallBack<Site>() {
             @Override
             public void doPostExecute(String results, IEntityDownloadCallback<Site> innerCallback) {
-                if (results != null && (results.isEmpty() || results.contains("Unauthorized"))) {
+                if (results == null) {
                     innerCallback.doAfterGet(null);
                 }
                 try {

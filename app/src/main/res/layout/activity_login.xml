@@ -33,8 +33,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="john"
+                android:inputType="textWebEmailAddress"
+                android:text="admin@geosnap.in"
                 android:ems="10"
                 android:id="@+id/txtUsername"
                 android:layout_gravity="center_horizontal"

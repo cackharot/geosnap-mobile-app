@@ -24,6 +24,7 @@ import com.example.cackharot.geosnap.lib.ConfigurationHelper;
 import com.example.cackharot.geosnap.lib.DownloadImageTask;
 import com.example.cackharot.geosnap.lib.Helpers;
 import com.example.cackharot.geosnap.lib.UploadTask;
+import com.example.cackharot.geosnap.lib.UserSessionManager;
 import com.example.cackharot.geosnap.model.Brand;
 import com.example.cackharot.geosnap.model.Site;
 import com.example.cackharot.geosnap.services.IEntityDownloadCallback;
@@ -47,6 +48,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
     private Site Model = new Site();
     private ArrayList<Bitmap> unSavedImages = new ArrayList<Bitmap>();
     private View view;
+    private UserSessionManager session;
 
     public ManageSiteDetailsFragment() {
 
@@ -61,6 +63,8 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         btn = (Button) view.findViewById(R.id.btnCapture);
         btn.setOnClickListener(this);
         unSavedImages.clear();
+
+        session = new UserSessionManager(getActivity().getApplicationContext());
 
         Bundle extras = getArguments();
         if (extras != null) {
@@ -178,7 +182,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         if (entity.name == null || entity.name.isEmpty())
             return false;
 
-        entity.district_id = new ObjectId("546ca00fb41d060ec8dcdf9f");
+        entity.district_id = session.getSelectedDistrict();
         entity.square_feet = Double.parseDouble(getTextValue(R.id.txtSqFt));
         entity.consumption = Double.parseDouble(getTextValue(R.id.txtConsumptionExcepted));
         entity.address = getTextValue(R.id.txtAddress);
@@ -249,7 +253,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
             String name = saveToFile(photo);
             unSavedImages.add(photo);
             ImageView img = createImageCtrl(name);
-            img.setImageBitmap(photo);
+            img.setImageBitmap(DownloadImageTask.resizeBitmap(photo));
         }
     }
 

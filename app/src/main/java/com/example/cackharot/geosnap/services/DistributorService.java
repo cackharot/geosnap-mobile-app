@@ -14,13 +14,14 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 public class DistributorService extends BaseService<Distributor> {
-    private static final String fetchUrl = ConfigurationHelper.BaseUrl + "/distributors?load_all=True&api_key=" + ConfigurationHelper.Api_key;
+    private static final String fetchUrl = ConfigurationHelper.BaseUrl + "/distributors?load_all=True";
     private final BaseRepository<Distributor> repo;
     private final Gson gson;
     private Type distributorArrayType = new TypeToken<Collection<Distributor>>() {
     }.getType();
 
     public DistributorService(Context context) {
+        super(context);
         this.repo = new BaseRepository<Distributor>(context, Distributor.class);
         this.gson = GsonHelper.getGson();
     }
@@ -29,7 +30,7 @@ public class DistributorService extends BaseService<Distributor> {
         doHttpRequest(fetchUrl, null, null, new IDownloadCallBack<Distributor>() {
             @Override
             public void doPostExecute(String results, IEntityDownloadCallback<Distributor> innerCallback) {
-                if (results != null && (results.isEmpty() || results.contains("Unauthorized"))) {
+                if (results == null) {
                     innerCallback.doAfterGetAll(null);
                 }
                 try {

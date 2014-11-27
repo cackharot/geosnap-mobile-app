@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class User implements java.io.Serializable, BaseModel {
     public ObjectId _id;
+    public String api_key;
     public String name;
     public String password;
     public String email;
@@ -20,6 +21,7 @@ public class User implements java.io.Serializable, BaseModel {
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
         values.put("id", this._id.toString());
+        values.put("api_key", this.api_key);
         values.put("name", this.name);
         values.put("password", this.password);
         values.put("email", this.email);
@@ -31,19 +33,20 @@ public class User implements java.io.Serializable, BaseModel {
     }
 
     public String[] getAllColumns() {
-        return new String[]{"id", "name", "password", "email", "question", "answer", "created_at", "status"};
+        return new String[]{"id", "api_key", "name", "password", "email", "question", "answer", "created_at", "status"};
     }
 
     public void setEntity(Cursor cursor) {
         User entity = this;
         entity._id = new ObjectId(cursor.getString(0));
-        entity.name = cursor.getString(1);
-        entity.password = cursor.getString(2);
-        entity.email = cursor.getString(3);
-        entity.security_question = cursor.getString(4);
-        entity.security_answer = cursor.getString(5);
-        entity.created_at = new Date(cursor.getLong(6));
-        entity.status = Boolean.parseBoolean(cursor.getString(7));
+        entity.api_key = cursor.getString(1);
+        entity.name = cursor.getString(2);
+        entity.password = cursor.getString(3);
+        entity.email = cursor.getString(4);
+        entity.security_question = cursor.getString(5);
+        entity.security_answer = cursor.getString(6);
+        entity.created_at = new Date(cursor.getLong(7));
+        entity.status = Boolean.parseBoolean(cursor.getString(8));
     }
 
     @Override

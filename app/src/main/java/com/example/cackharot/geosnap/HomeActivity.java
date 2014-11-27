@@ -16,13 +16,12 @@ import com.example.cackharot.geosnap.lib.UserSessionManager;
 public class HomeActivity extends ActionBarActivity {
 
     private Context _context;
-    private UserSessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         _context = getApplicationContext();
-        session = new UserSessionManager(_context);
+        UserSessionManager session = new UserSessionManager(_context);
 
         session.checkLogin();
 
@@ -51,8 +50,8 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void doNavigation(View target){
-        switch (target.getId()){
+    public void doNavigation(View target) {
+        switch (target.getId()) {
             case R.id.btnExit:
                 onBackPressed();
                 break;
@@ -67,8 +66,7 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        session.logoutUser();
-        finish();
+        super.onBackPressed();
     }
 
     private void navigate(Class<?> activityClass) {

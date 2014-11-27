@@ -8,16 +8,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.example.cackharot.geosnap.LoginActivity;
+import com.example.cackharot.geosnap.model.User;
+
+import org.bson.types.ObjectId;
 
 public class UserSessionManager {
-
-    // Shared Preferences reference
     SharedPreferences pref;
-
-    // Editor reference for Shared preferences
     Editor editor;
-
-    // Context
     Context _context;
 
     // Shared pref mode
@@ -28,12 +25,9 @@ public class UserSessionManager {
 
     // All Shared Preferences Keys
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";
-
-    // User name (make variable public to access from outside)
     public static final String KEY_NAME = "name";
-
-    // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
+    private static final String KEY_API_KEY = "api_key";
 
     // Constructor
     public UserSessionManager(Context context) {
@@ -43,18 +37,20 @@ public class UserSessionManager {
     }
 
     //Create login session
-    public void createUserLoginSession(String name, String email) {
-        // Storing login value as TRUE
+    public void createUserLoginSession(User user) {
         editor.putBoolean(IS_USER_LOGIN, true);
-
-        // Storing name in pref
-        editor.putString(KEY_NAME, name);
-
-        // Storing email in pref
-        editor.putString(KEY_EMAIL, email);
-
-        // commit changes
+        editor.putString(KEY_NAME, user.name);
+        editor.putString(KEY_EMAIL, user.email);
         editor.commit();
+    }
+
+    public void setApiKey(String api_key) {
+        editor.putString(KEY_API_KEY, api_key);
+        editor.commit();
+    }
+
+    public String getApiKey() {
+        return pref.getString(KEY_API_KEY, null);
     }
 
     /**
@@ -65,19 +61,10 @@ public class UserSessionManager {
     public boolean checkLogin() {
         // Check login status
         if (!this.isUserLoggedIn()) {
-
-            // user is not logged in redirect him to Login Activity
             Intent i = new Intent(_context, LoginActivity.class);
-
-            // Closing all the Activities from stack
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            // Add new Flag to start new Activity
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            // Staring Login Activity
             _context.startActivity(i);
-
             return true;
         }
         return false;
@@ -88,17 +75,10 @@ public class UserSessionManager {
      * Get stored session data
      */
     public HashMap<String, String> getUserDetails() {
-
-        //Use hashmap to store user credentials
         HashMap<String, String> user = new HashMap<String, String>();
-
-        // user name
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-
-        // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-
-        // return user
+        user.put(KEY_API_KEY, pref.getString(KEY_API_KEY, null));
         return user;
     }
 
@@ -106,15 +86,18 @@ public class UserSessionManager {
      * Clear session details
      */
     public void logoutUser() {
-
         // Clearing all user data from Shared Preferences
-        editor.clear();
-        editor.commit();
+        clear();
 
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         _context.startActivity(intent);
+    }
+
+    public void clear() {
+        editor.clear();
+        editor.commit();
     }
 
 
@@ -138,5 +121,25 @@ public class UserSessionManager {
         args[2] = pref.getString("default_center", null);
         args[3] = pref.getString("default_dealer", null);
         return args;
+    }
+
+    public ObjectId getSelectedDistributor() {
+        String default_distributor = pref.getString("default_distributor", null);
+        return default_distributor == null ? new ObjectId() : new ObjectId(default_distributor);
+    }
+
+    public ObjectId getSelectedDistrict() {
+        String default_district = pref.getString("default_district", null);
+        return default_district == null ? new ObjectId() : new ObjectId(default_district);
+    }
+
+    public ObjectId getSelectedConsumptionCenter() {
+        String default_center = pref.getString("default_center", null);
+        return default_center == null ? new ObjectId() : new ObjectId(default_center);
+    }
+
+    public ObjectId getSelectedDealer() {
+        String default_dealer = pref.getString("default_dealer", null);
+        return default_dealer == null ? new ObjectId() : new ObjectId(default_dealer);
     }
 }

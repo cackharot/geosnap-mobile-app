@@ -1,8 +1,10 @@
 package com.example.cackharot.geosnap.services;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.example.cackharot.geosnap.lib.UserSessionManager;
 import com.example.cackharot.geosnap.model.BaseModel;
 
 import org.apache.http.HttpEntity;
@@ -15,6 +17,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
@@ -26,6 +29,12 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public abstract class BaseService<T> {
+    protected final UserSessionManager userSessionManager;
+
+    protected BaseService(Context context) {
+        this.userSessionManager = new UserSessionManager(context);
+    }
+
     protected void doHttpRequest(String baseUrl, HashMap<String, String> queryArgs, String post_data,
                                  IDownloadCallBack<T> callback, IEntityDownloadCallback<T> innerCallback) {
         Uri.Builder b = Uri.parse(baseUrl).buildUpon();
@@ -44,7 +53,16 @@ public abstract class BaseService<T> {
         private final IEntityDownloadCallback<T> innerCallback;
         private HttpRequestBase httpRequest;
 
-        public HttpService(Uri url, String jsonData, IDownloadCallBack<T> callBack, IEntityDownloadCallback<T> innerCallback) {
+        public HttpService(Uri baseUrl, String jsonData, IDownloadCallBack<T> callBack, IEntityDownloadCallback<T> innerCallback) {
+            String apiKey = userSessionManager.getApiKey();
+            Uri url = baseUrl;
+
+            if (apiKey != null) {
+                Uri.Builder builder = Uri.parse(baseUrl.toString()).buildUpon();
+                builder.appendQueryParameter("api_key", apiKey);
+                url = builder.build();
+            }
+
             this.downloadCallBack = callBack;
             this.innerCallback = innerCallback;
             if (jsonData == null || jsonData.isEmpty()) {
@@ -81,6 +99,10 @@ public abstract class BaseService<T> {
                         || statusCode == HttpStatus.SC_CREATED) {
                     HttpEntity entity = response.getEntity();
                     content = getASCIIContentFromEntity(entity);
+
+                    if (content != null && content.contains("Unauthorized")) {
+                        content = null;
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

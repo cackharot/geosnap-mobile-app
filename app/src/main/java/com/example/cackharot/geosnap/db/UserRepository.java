@@ -45,12 +45,27 @@ public class UserRepository {
         return entity;
     }
 
-    public boolean ValidateUser(String name, String password) {
+    public User GetUserByEmail(String email) {
+        User entity = new User();
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.query(ConfigurationHelper.TABLE_USER,
+                entity.getAllColumns(),
+                "email=?", new String[]{String.valueOf(email)}, null, null, null);
+        if (cursor == null)
+            return null;
+        cursor.moveToFirst();
+        entity.setEntity(cursor);
+        cursor.close();
+        this.close();
+        return entity;
+    }
+
+    public boolean ValidateUser(String email, String password) {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.query(ConfigurationHelper.TABLE_USER,
                 new User().getAllColumns(),
-                " name=? AND password=? ",
-                new String[]{String.valueOf(name), String.valueOf(password)}, null, null, null);
+                " email=? AND password=? ",
+                new String[]{String.valueOf(email), String.valueOf(password)}, null, null, null);
         if (cursor == null)
             return false;
         Integer count = cursor.getCount();
