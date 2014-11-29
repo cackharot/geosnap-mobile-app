@@ -41,7 +41,6 @@ public class LoginActivity extends Activity {
         session = new UserSessionManager(_context);
 
         if (session.isUserLoggedIn()) {
-            //navigate(HomeActivity.class);
             navigate(ChooseDistributorActivity.class);
         }
 
@@ -119,5 +118,6 @@ public class LoginActivity extends Activity {
 
         // Staring Login Activity
         _context.startActivity(i);
+        finish();
     }
 }

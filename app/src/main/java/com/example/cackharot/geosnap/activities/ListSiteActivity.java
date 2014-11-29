@@ -3,6 +3,7 @@ package com.example.cackharot.geosnap.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,7 @@ public class ListSiteActivity extends ActionBarActivity implements ListSiteFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_site);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             ListSiteFragment fragment = new ListSiteFragment();
@@ -44,7 +46,8 @@ public class ListSiteActivity extends ActionBarActivity implements ListSiteFragm
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 
@@ -72,5 +75,6 @@ public class ListSiteActivity extends ActionBarActivity implements ListSiteFragm
 
         // Staring Login Activity
         _context.startActivity(i);
+        finish();
     }
 }

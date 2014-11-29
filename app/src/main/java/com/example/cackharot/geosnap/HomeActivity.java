@@ -2,12 +2,14 @@ package com.example.cackharot.geosnap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.cackharot.geosnap.activities.ChooseDistributorActivity;
 import com.example.cackharot.geosnap.activities.ListSiteActivity;
 import com.example.cackharot.geosnap.activities.NewSiteActivity;
 import com.example.cackharot.geosnap.lib.UserSessionManager;
@@ -15,13 +17,10 @@ import com.example.cackharot.geosnap.lib.UserSessionManager;
 
 public class HomeActivity extends ActionBarActivity {
 
-    private Context _context;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _context = getApplicationContext();
-        UserSessionManager session = new UserSessionManager(_context);
+        UserSessionManager session = new UserSessionManager(getApplicationContext());
 
         session.checkLogin();
 
@@ -44,6 +43,7 @@ public class HomeActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 
@@ -53,7 +53,7 @@ public class HomeActivity extends ActionBarActivity {
     public void doNavigation(View target) {
         switch (target.getId()) {
             case R.id.btnExit:
-                onBackPressed();
+                exitApp();
                 break;
             case R.id.btnNewSite:
                 navigate(NewSiteActivity.class);
@@ -61,7 +61,16 @@ public class HomeActivity extends ActionBarActivity {
             case R.id.btnViewSites:
                 navigate(ListSiteActivity.class);
                 break;
+            case R.id.btnSettings:
+                navigate(ChooseDistributorActivity.class);
+                break;
         }
+    }
+
+    private void exitApp() {
+        UserSessionManager session = new UserSessionManager(getApplicationContext());
+        finish();
+        session.logoutUser();
     }
 
     @Override
@@ -72,6 +81,7 @@ public class HomeActivity extends ActionBarActivity {
     private void navigate(Class<?> activityClass) {
         // navigate to next activity
         // user is not logged in redirect him to Login Activity
+        Context _context = getApplicationContext();
         Intent i = new Intent(_context, activityClass);
 
         // Closing all the Activities from stack

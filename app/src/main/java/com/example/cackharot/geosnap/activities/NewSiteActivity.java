@@ -3,6 +3,7 @@ package com.example.cackharot.geosnap.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class NewSiteActivity extends ActionBarActivity implements ManageSiteDeta
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_new_site);
         if (savedInstanceState == null) {
             ManageSiteDetailsFragment fragment = new ManageSiteDetailsFragment();
@@ -45,7 +47,8 @@ public class NewSiteActivity extends ActionBarActivity implements ManageSiteDeta
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 
@@ -71,5 +74,6 @@ public class NewSiteActivity extends ActionBarActivity implements ManageSiteDeta
 
         // Staring Login Activity
         _context.startActivity(i);
+        finish();
     }
 }

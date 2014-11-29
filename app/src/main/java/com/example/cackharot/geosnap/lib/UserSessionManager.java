@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Base64;
 
 import com.example.cackharot.geosnap.LoginActivity;
 import com.example.cackharot.geosnap.model.User;
@@ -45,6 +46,7 @@ public class UserSessionManager {
     }
 
     public void setApiKey(String api_key) {
+        api_key = Base64.encodeToString(api_key.getBytes(), Base64.DEFAULT);
         editor.putString(KEY_API_KEY, api_key);
         editor.commit();
     }

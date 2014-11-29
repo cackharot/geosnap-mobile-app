@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class ConfigurationHelper {
     public static final int CAMERA_REQUEST = 1888;
-    public static String Host = "http://192.168.2.10:5500";
+    public static String Host = "http://192.168.1.3:5500";
     public static String BaseUrl = Host + "/api";
     public static String SiteImageUrl = Host + "/static/images/sites/";
     public static String SiteImageUploadUrl = Host + "/upload_site_images";

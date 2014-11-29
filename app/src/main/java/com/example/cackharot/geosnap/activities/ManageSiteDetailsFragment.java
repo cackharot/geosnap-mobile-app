@@ -241,8 +241,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         File dir = new File(storageDir);
         if (!dir.exists())
             dir.mkdir();
-        File image = new File(storageDir + File.separator + imageFileName + ".jpg");
-        return image;
+        return new File(storageDir + File.separator + imageFileName + ".jpg");
     }
 
     @Override
@@ -257,7 +256,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         }
     }
 
-    private void sendPhoto(ArrayList<Bitmap> bitmap, final IEntityDownloadCallback<Site> callback) throws Exception {
+    private void sendPhoto(ArrayList<Bitmap> bitmap, final IEntityDownloadCallback<Site> callback) {
         new UploadTask(ConfigurationHelper.SiteImageUploadUrl, new UploadTask.IUploadComplete() {
             @Override
             public void complete(List<String> lst) {
@@ -276,7 +275,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
             return "tempfile.jpg";
         try {
             File file = createImageFile();
-            file.createNewFile();
+            boolean newFile = file.createNewFile();
             OutputStream imgFile = new FileOutputStream(file);
             photo.compress(Bitmap.CompressFormat.JPEG, 100, imgFile);
             imgFile.close();

@@ -1,7 +1,9 @@
 package com.example.cackharot.geosnap.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.cackharot.geosnap.HomeActivity;
 import com.example.cackharot.geosnap.R;
@@ -61,6 +64,10 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         spConsumptionCenter.setOnItemSelectedListener(this);
         spDealer.setOnItemSelectedListener(this);
 
+        loadData();
+    }
+
+    private void loadData() {
         DistributorService distributorService = new DistributorService(getApplication());
 
         final ProgressDialog dialog = ProgressDialog.show(this,
@@ -71,8 +78,10 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         distributorService.GetAll(new IEntityDownloadCallback<Distributor>() {
             @Override
             public void doAfterGetAll(Collection<Distributor> results) {
-                if (results == null) {
-                    results = new ArrayList<Distributor>();
+                if (results == null || results.isEmpty()) {
+                    dialog.dismiss();
+                    showErrorAndExit();
+                    return;
                 }
 
                 updateModels(results);
@@ -93,6 +102,41 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
 
             }
         });
+    }
+
+    private void showErrorAndExit() {
+        final AlertDialogFragment alert = new AlertDialogFragment();
+        alert.setTitle("Error contacting server!")
+                .setMessage("We could not fetch required data from server. Check internet connection is enabled.")
+                .setPositiveBtnText("Try Again")
+                .setNegativeBtnText("Exit")
+                .setOnClickListener(
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                alert.dismiss();
+                                switch (which) {
+                                    case DialogInterface.BUTTON_POSITIVE: {
+                                        loadData();
+                                        break;
+                                    }
+                                    case DialogInterface.BUTTON_NEGATIVE: {
+                                        exitApp();
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+        alert.setCancelable(false);
+        alert.show(getFragmentManager(), "alert-dialog");
+    }
+
+    private void exitApp() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void updateModels(Collection<Distributor> results) {
