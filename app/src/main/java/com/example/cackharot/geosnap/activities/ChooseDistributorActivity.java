@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     private final HashMap<String, List<String>> mapDistrictCenters = new HashMap<String, List<String>>();
     private final HashMap<String, List<String>> mapCenterDealers = new HashMap<String, List<String>>();
     private UserSessionManager session;
+    private EditText txtServerPort;
+    private EditText txtServerAddress;
 
 
     @Override
@@ -65,6 +68,14 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         spDistrict.setOnItemSelectedListener(this);
         spConsumptionCenter.setOnItemSelectedListener(this);
         spDealer.setOnItemSelectedListener(this);
+
+        String serverAddress = session.getServerAddress();
+        int serverPort = session.getServerPort();
+        txtServerAddress = ((EditText) findViewById(R.id.txtServerAddress));
+        txtServerPort = ((EditText) findViewById(R.id.txtServerPort));
+
+        txtServerAddress.setText(serverAddress);
+        txtServerPort.setText(String.valueOf(serverPort));
 
         loadData();
     }
@@ -196,18 +207,10 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     }
 
     private void navigate(Class<?> activityClass) {
-        // navigate to next activity
-        // user is not logged in redirect him to Login Activity
         Context _context = getApplicationContext();
         Intent i = new Intent(_context, activityClass);
-
-        // Closing all the Activities from stack
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        // Staring Login Activity
         _context.startActivity(i);
         finish();
     }
@@ -248,6 +251,11 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         String dealer = (String) spDealer.getSelectedItem();
 
         session.setDefaultsValues(distributor, district, center, dealer);
+
+        String serverAddress = txtServerAddress.getText().toString();
+        String serverPort = txtServerPort.getText().toString();
+        session.setServerAddress(serverAddress);
+        session.setServerPort(Integer.parseInt(serverPort));
 
         navigate(HomeActivity.class);
     }

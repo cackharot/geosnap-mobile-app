@@ -79,18 +79,10 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void navigate(Class<?> activityClass) {
-        // navigate to next activity
-        // user is not logged in redirect him to Login Activity
         Context _context = getApplicationContext();
         Intent i = new Intent(_context, activityClass);
-
-        // Closing all the Activities from stack
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        // Staring Login Activity
         _context.startActivity(i);
     }
 }

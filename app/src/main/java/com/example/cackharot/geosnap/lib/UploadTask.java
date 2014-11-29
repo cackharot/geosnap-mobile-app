@@ -1,5 +1,6 @@
 package com.example.cackharot.geosnap.lib;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
@@ -17,11 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UploadTask extends AsyncTask<List<Bitmap>, Void, List<String>> {
-    private final String Url;
+    private final Context context;
+    private String Url;
     private final IUploadComplete uploadComplete;
 
-    public UploadTask(String url, IUploadComplete uploadComplete) {
+    public UploadTask(Context context, String url, IUploadComplete uploadComplete) {
+        this.context = context;
+        UserSessionManager userSessionManager = new UserSessionManager(context);
         this.Url = url;
+        this.Url = this.Url.replaceAll("serverAddress", userSessionManager.getServerAddress());
+        this.Url = this.Url.replaceAll("serverPort", String.valueOf(userSessionManager.getServerPort()));
         this.uploadComplete = uploadComplete;
     }
 

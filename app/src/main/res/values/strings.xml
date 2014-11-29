@@ -25,5 +25,7 @@
     <string name="lblDistributor">Distributor</string>
     <string name="lblSave">Save</string>
     <string name="lblTakePhoto">Take Photo</string>
+    <string name="lblServerIp">Server address</string>
+    <string name="lblServerPort">Server Port</string>
 
 </resources>

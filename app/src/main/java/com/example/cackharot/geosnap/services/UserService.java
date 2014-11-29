@@ -118,11 +118,13 @@ public class UserService extends BaseService<User> implements IUserService {
                         user.api_key = item.api_key;
                         innerCallback.doAfterGet(user);
                     } else {
-                        Log.w("UserLogin", item.message);
+                        Log.i("UserLogin", item.message);
                         innerCallback.doAfterGet(null);
                     }
-                } catch (Exception ignored) {
-                    Log.e("SiteService", ignored.getLocalizedMessage());
+                } catch (Exception ex) {
+                    if (ex.getMessage() != null) {
+                        Log.e("UserLogin", ex.getMessage());
+                    }
                     innerCallback.doAfterGet(null);
                 }
             }

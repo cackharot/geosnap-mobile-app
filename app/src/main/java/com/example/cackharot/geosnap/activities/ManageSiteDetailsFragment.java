@@ -282,7 +282,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
     }
 
     private void sendPhoto(ArrayList<Bitmap> bitmap, final IEntityDownloadCallback<Site> callback) {
-        new UploadTask(ConfigurationHelper.SiteImageUploadUrl, new UploadTask.IUploadComplete() {
+        new UploadTask(getActivity().getApplicationContext(), ConfigurationHelper.SiteImageUploadUrl, new UploadTask.IUploadComplete() {
             @Override
             public void complete(List<String> lst) {
                 if (lst != null && !lst.isEmpty()) {

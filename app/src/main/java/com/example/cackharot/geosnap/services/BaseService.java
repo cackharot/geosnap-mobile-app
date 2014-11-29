@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.example.cackharot.geosnap.lib.UserSessionManager;
-import com.example.cackharot.geosnap.model.BaseModel;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,7 +16,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
@@ -25,7 +23,6 @@ import org.apache.http.protocol.HttpContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public abstract class BaseService<T> {
@@ -37,6 +34,10 @@ public abstract class BaseService<T> {
 
     protected void doHttpRequest(String baseUrl, HashMap<String, String> queryArgs, String post_data,
                                  IDownloadCallBack<T> callback, IEntityDownloadCallback<T> innerCallback) {
+
+        baseUrl = baseUrl.replaceAll("serverAddress", userSessionManager.getServerAddress());
+        baseUrl = baseUrl.replaceAll("serverPort", String.valueOf(userSessionManager.getServerPort()));
+
         Uri.Builder b = Uri.parse(baseUrl).buildUpon();
         if (queryArgs != null && !queryArgs.isEmpty()) {
             for (String key : queryArgs.keySet()) {

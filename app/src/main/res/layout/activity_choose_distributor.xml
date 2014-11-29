@@ -59,6 +59,32 @@
         android:id="@+id/spinnerDealer"
         android:minHeight="30dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/lblServerIp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtServerAddress"
+        android:layout_gravity="center_horizontal"
+        android:inputType="text|textUri" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/lblServerPort" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtServerPort"
+        android:layout_gravity="center_horizontal"
+        android:inputType="number" />
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

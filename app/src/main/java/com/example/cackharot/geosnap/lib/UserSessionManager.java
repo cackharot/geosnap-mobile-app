@@ -144,4 +144,23 @@ public class UserSessionManager {
         String default_dealer = pref.getString("default_dealer", null);
         return default_dealer;
     }
+
+    public String getServerAddress() {
+        // return "192.168.1.3";
+        return pref.getString("server_address", "54.68.89.192");
+    }
+
+    public int getServerPort() {
+        return Integer.parseInt(pref.getString("server_port", "8080"));
+    }
+
+    public void setServerAddress(String value) {
+        editor.putString("server_address", value);
+        editor.commit();
+    }
+
+    public void setServerPort(int value) {
+        editor.putString("server_port", String.valueOf(value));
+        editor.commit();
+    }
 }
