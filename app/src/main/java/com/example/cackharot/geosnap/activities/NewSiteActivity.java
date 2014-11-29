@@ -13,9 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.cackharot.geosnap.HomeActivity;
 import com.example.cackharot.geosnap.R;
 
 public class NewSiteActivity extends ActionBarActivity implements ManageSiteDetailsFragment.OnManageSiteFragmentInteractionListener {
+
+    private ManageSiteDetailsFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +26,7 @@ public class NewSiteActivity extends ActionBarActivity implements ManageSiteDeta
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_new_site);
         if (savedInstanceState == null) {
-            ManageSiteDetailsFragment fragment = new ManageSiteDetailsFragment();
+            fragment = new ManageSiteDetailsFragment();
             fragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
@@ -49,6 +52,14 @@ public class NewSiteActivity extends ActionBarActivity implements ManageSiteDeta
         //noinspection SimplifiableIfStatement
         if (id == R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
+            finish();
+            //navigate(HomeActivity.class);
+            return true;
+        } else if (id == R.id.save_site) {
+            fragment.doSave();
+            return true;
+        } else if (id == R.id.take_photo) {
+            fragment.doCapture();
             return true;
         }
 

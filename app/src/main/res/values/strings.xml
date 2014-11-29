@@ -18,5 +18,12 @@
     <string name="title_activity_list_site">Sites</string>
     <string name="title_activity_choose_distributor">Choose defaults</string>
     <string name="NoData">No data</string>
+    <string name="lblContinue">Continue</string>
+    <string name="lblDealer">Dealer</string>
+    <string name="lblConsumptionCenter">Consumption Center</string>
+    <string name="lblDistrict">District</string>
+    <string name="lblDistributor">Distributor</string>
+    <string name="lblSave">Save</string>
+    <string name="lblTakePhoto">Take Photo</string>
 
 </resources>

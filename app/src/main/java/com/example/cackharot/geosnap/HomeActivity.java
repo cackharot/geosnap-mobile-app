@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.example.cackharot.geosnap.activities.ChooseDistributorActivity;
 import com.example.cackharot.geosnap.activities.ListSiteActivity;
@@ -20,8 +21,8 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserSessionManager session = new UserSessionManager(getApplicationContext());
 
+        UserSessionManager session = new UserSessionManager(getApplicationContext());
         session.checkLogin();
 
         setContentView(R.layout.activity_home);
@@ -30,7 +31,7 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        //getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -43,7 +44,6 @@ public class HomeActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 

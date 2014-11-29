@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_gravity="center_horizontal|top"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    tools:context="com.example.cackharot.geosnap.ChooseDistributorActivity"
-    android:padding="15dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="com.example.cackharot.geosnap.ChooseDistributorActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Distributor"
+        android:text="@string/lblDistributor"
         android:id="@+id/textView2" />
 
     <Spinner
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="District"
+        android:text="@string/lblDistrict"
         android:id="@+id/textView3" />
 
     <Spinner
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Consumption Center"
+        android:text="@string/lblConsumptionCenter"
         android:id="@+id/textView4" />
 
     <Spinner
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Dealer"
+        android:text="@string/lblDealer"
         android:id="@+id/textView5" />
 
     <Spinner
@@ -62,7 +62,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Continue"
+        android:text="@string/lblContinue"
         android:id="@+id/btnChoose"
         android:layout_gravity="center_horizontal"
         android:onClick="doContinue" />

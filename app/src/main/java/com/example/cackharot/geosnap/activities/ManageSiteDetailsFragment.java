@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -188,10 +189,16 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         entity.address = getTextValue(R.id.txtAddress);
         entity.rebars_considered = getTextValue(R.id.txtRebarsConsidered);
 
-        double b1Consumption = Double.parseDouble(getTextValue(R.id.txtBrand1Consumption));
-        String b1Name = getTextValue(R.id.txtBrand1Name);
-        Brand brand1 = new Brand(b1Name, b1Consumption);
-        entity.used_brands.add(brand1);
+        String brandConsumption = getTextValue(R.id.txtBrand1Consumption);
+        String brandName = getTextValue(R.id.txtBrand1Name);
+        if (brandConsumption != null
+                && TextUtils.isDigitsOnly(brandConsumption)
+                && !TextUtils.isEmpty(brandConsumption)
+                && !TextUtils.isEmpty(brandName)) {
+            double b1Consumption = Double.parseDouble(brandConsumption);
+            Brand brand1 = new Brand(brandName, b1Consumption);
+            entity.used_brands.add(brand1);
+        }
 
         loadLocation(entity);
         return true;
@@ -245,7 +252,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         }
     }
 
-    private void doCapture() {
+    public void doCapture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, ConfigurationHelper.CAMERA_REQUEST);

@@ -4,10 +4,7 @@
     android:layout_gravity="center_horizontal|top"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.example.cackharot.geosnap.HomeActivity">
 
     <Button
@@ -16,6 +13,9 @@
         android:id="@+id/btnNewSite"
         android:layout_gravity="left|top"
         android:text="@string/lblNewSite"
+        android:drawableLeft="@drawable/ic_action_content_add"
+        android:textSize="24sp"
+        android:padding="16dp"
         android:onClick="doNavigation" />
 
     <Button
@@ -24,21 +24,30 @@
         android:id="@+id/btnViewSites"
         android:layout_gravity="center_horizontal"
         android:text="@string/lblViewSites"
+        android:drawableLeft="@drawable/ic_action_action_list"
+        android:textSize="24sp"
+        android:padding="16dp"
         android:onClick="doNavigation" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/lblSettings"
         android:id="@+id/btnSettings"
         android:layout_gravity="center_horizontal"
+        android:text="@string/lblSettings"
+        android:drawableLeft="@drawable/ic_action_action_settings"
+        android:textSize="24sp"
+        android:padding="16dp"
         android:onClick="doNavigation" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/lblExit"
         android:id="@+id/btnExit"
         android:layout_gravity="center_horizontal"
+        android:text="@string/lblExit"
+        android:drawableLeft="@drawable/ic_action_action_settings_power"
+        android:textSize="24sp"
+        android:padding="16dp"
         android:onClick="doNavigation" />
 </LinearLayout>

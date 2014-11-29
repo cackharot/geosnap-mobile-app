@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.cackharot.geosnap.HomeActivity;
 import com.example.cackharot.geosnap.R;
 import com.example.cackharot.geosnap.model.Site;
 
@@ -47,7 +48,8 @@ public class ListSiteActivity extends ActionBarActivity implements ListSiteFragm
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
+            //NavUtils.navigateUpFromSameTask(this);
+            navigate(HomeActivity.class, null);
             return true;
         }
 
@@ -65,7 +67,9 @@ public class ListSiteActivity extends ActionBarActivity implements ListSiteFragm
         Context _context = getApplicationContext();
         Intent i = new Intent(_context, activityClass);
 
-        i.putExtra("site_id", site_id);
+        if (site_id != null) {
+            i.putExtra("site_id", site_id);
+        }
 
         // Closing all the Activities from stack
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
