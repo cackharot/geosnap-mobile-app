@@ -26,6 +26,8 @@ import com.example.cackharot.geosnap.model.District;
 import com.example.cackharot.geosnap.services.DistributorService;
 import com.example.cackharot.geosnap.services.IEntityDownloadCallback;
 
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -240,8 +242,8 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
     }
 
     public void doContinue(View view) {
-        String distributor = ((Distributor) spDistributor.getSelectedItem()).name;
-        String district = ((District) spDistrict.getSelectedItem()).name;
+        ObjectId distributor = ((Distributor) spDistributor.getSelectedItem()).getId();
+        ObjectId district = ((District) spDistrict.getSelectedItem()).getId();
         String center = (String) spConsumptionCenter.getSelectedItem();
         String dealer = (String) spDealer.getSelectedItem();
 

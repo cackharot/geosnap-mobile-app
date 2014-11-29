@@ -193,9 +193,27 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
         Brand brand1 = new Brand(b1Name, b1Consumption);
         entity.used_brands.add(brand1);
 
-        entity.location.latitude = 11.063;
-        entity.location.longitude = 54.023;
+        loadLocation(entity);
         return true;
+    }
+
+    private void loadLocation(Site entity) {
+        if (entity.getId() != null) {
+            return;
+        }
+        // check if GPS enabled
+        GPSTracker gpsTracker = new GPSTracker(getActivity());
+
+        if (gpsTracker.canGetLocation()) {
+
+            entity.location.latitude = gpsTracker.latitude;
+            entity.location.longitude = gpsTracker.longitude;
+        } else {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gpsTracker.showSettingsAlert();
+        }
     }
 
     public void doSaveSiteDetails(IEntityDownloadCallback<Site> callback) {

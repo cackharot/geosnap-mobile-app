@@ -108,9 +108,9 @@ public class UserSessionManager {
         return pref.getBoolean(IS_USER_LOGIN, false);
     }
 
-    public void setDefaultsValues(String distributor, String district, String center, String dealer) {
-        editor.putString("default_distributor", distributor);
-        editor.putString("default_district", district);
+    public void setDefaultsValues(ObjectId distributor, ObjectId district, String center, String dealer) {
+        editor.putString("default_distributor", distributor.toString());
+        editor.putString("default_district", district.toString());
         editor.putString("default_center", center);
         editor.putString("default_dealer", dealer);
         editor.commit();
@@ -135,13 +135,13 @@ public class UserSessionManager {
         return default_district == null ? new ObjectId() : new ObjectId(default_district);
     }
 
-    public ObjectId getSelectedConsumptionCenter() {
+    public String getSelectedConsumptionCenter() {
         String default_center = pref.getString("default_center", null);
-        return default_center == null ? new ObjectId() : new ObjectId(default_center);
+        return default_center;
     }
 
-    public ObjectId getSelectedDealer() {
+    public String getSelectedDealer() {
         String default_dealer = pref.getString("default_dealer", null);
-        return default_dealer == null ? new ObjectId() : new ObjectId(default_dealer);
+        return default_dealer;
     }
 }

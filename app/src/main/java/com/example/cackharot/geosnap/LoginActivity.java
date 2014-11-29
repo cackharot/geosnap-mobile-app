@@ -1,6 +1,7 @@
 package com.example.cackharot.geosnap;
 
 import com.example.cackharot.geosnap.activities.ChooseDistributorActivity;
+import com.example.cackharot.geosnap.activities.GPSTracker;
 import com.example.cackharot.geosnap.contract.ILoginCallback;
 import com.example.cackharot.geosnap.contract.IUserService;
 import com.example.cackharot.geosnap.lib.UserSessionManager;
@@ -40,13 +41,20 @@ public class LoginActivity extends Activity {
         _context = getApplicationContext();
         session = new UserSessionManager(_context);
 
-        if (session.isUserLoggedIn()) {
-            navigate(ChooseDistributorActivity.class);
-        }
-
         userService = new UserService(_context);
         setContentView(R.layout.activity_login);
         findViewById(R.id.btnLogin).setOnClickListener(doLogin);
+
+        GPSTracker gpsTracker = new GPSTracker(this);
+
+        if (!gpsTracker.canGetLocation()) {
+            gpsTracker.showSettingsAlert();
+            return;
+        }
+
+        if (session.isUserLoggedIn()) {
+            navigate(ChooseDistributorActivity.class);
+        }
     }
 
     @Override
