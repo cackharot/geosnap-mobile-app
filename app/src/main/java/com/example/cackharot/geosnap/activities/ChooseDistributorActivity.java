@@ -69,14 +69,6 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         spConsumptionCenter.setOnItemSelectedListener(this);
         spDealer.setOnItemSelectedListener(this);
 
-        String serverAddress = session.getServerAddress();
-        int serverPort = session.getServerPort();
-        txtServerAddress = ((EditText) findViewById(R.id.txtServerAddress));
-        txtServerPort = ((EditText) findViewById(R.id.txtServerPort));
-
-        txtServerAddress.setText(serverAddress);
-        txtServerPort.setText(String.valueOf(serverPort));
-
         loadData();
     }
 
@@ -249,14 +241,7 @@ public class ChooseDistributorActivity extends ActionBarActivity implements Adap
         ObjectId district = ((District) spDistrict.getSelectedItem()).getId();
         String center = (String) spConsumptionCenter.getSelectedItem();
         String dealer = (String) spDealer.getSelectedItem();
-
         session.setDefaultsValues(distributor, district, center, dealer);
-
-        String serverAddress = txtServerAddress.getText().toString();
-        String serverPort = txtServerPort.getText().toString();
-        session.setServerAddress(serverAddress);
-        session.setServerPort(Integer.parseInt(serverPort));
-
         navigate(HomeActivity.class);
     }
 

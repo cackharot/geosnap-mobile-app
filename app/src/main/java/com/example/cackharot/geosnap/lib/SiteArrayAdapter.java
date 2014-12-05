@@ -53,7 +53,7 @@ public class SiteArrayAdapter extends ArrayAdapter<Site> {
 
         if(item.photos != null && !item.photos.isEmpty()) {
             ImageView siteImg = (ImageView) convertView.findViewById(R.id.imgSite);
-            new DownloadImageTask(siteImg)
+            new DownloadImageTask(this.mContext, siteImg)
                     .execute(ConfigurationHelper.SiteImageUrl + item.photos.get(0));
         }
 

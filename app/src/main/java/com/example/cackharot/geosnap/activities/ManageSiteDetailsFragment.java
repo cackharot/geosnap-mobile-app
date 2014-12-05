@@ -119,7 +119,7 @@ public class ManageSiteDetailsFragment extends Fragment implements View.OnClickL
 
         if (item.photos != null && !item.photos.isEmpty()) {
             for (String name : item.photos) {
-                new DownloadImageTask(createImageCtrl(name))
+                new DownloadImageTask(getActivity().getApplicationContext(), createImageCtrl(name))
                         .execute(ConfigurationHelper.SiteImageUrl + name);
             }
         }

@@ -11,10 +11,16 @@ import com.example.cackharot.geosnap.services.UserService;
 import com.example.cackharot.geosnap.util.SystemUiHider;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,6 +63,21 @@ public class LoginActivity extends Activity {
         }
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_login, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_login_settings:
+                showSettingsDialog();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -70,6 +91,45 @@ public class LoginActivity extends Activity {
             validateUser(txtUserName.getText().toString().trim(), txtPassword.getText().toString().trim());
         }
     };
+
+    private void showSettingsDialog() {
+        Context context = getApplicationContext();
+        final LayoutInflater li = LayoutInflater.from(context);
+        final View promptsView = li.inflate(R.layout.server_settings, null);
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+
+        final String serverAddress = session.getServerAddress();
+        final int serverPort = session.getServerPort();
+
+        final EditText txtServerAddress = ((EditText) promptsView.findViewById(R.id.txtServerAddress));
+        final EditText txtServerPort = ((EditText) promptsView.findViewById(R.id.txtServerPort));
+        txtServerAddress.setText(serverAddress);
+        txtServerPort.setText(String.valueOf(serverPort));
+
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                String serverAddress = txtServerAddress.getText().toString();
+                                Integer serverPort = Integer.parseInt(txtServerPort.getText().toString());
+
+                                session.setServerAddress(serverAddress);
+                                session.setServerPort(serverPort);
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        alertDialogBuilder.create().show();
+    }
 
     private void validateUser(final String email, final String password) {
         final ProgressDialog dialog = ProgressDialog.show(this,

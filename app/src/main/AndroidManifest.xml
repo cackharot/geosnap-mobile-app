@@ -18,7 +18,7 @@
         <activity
             android:name="com.example.cackharot.geosnap.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/login"
+            android:label="@string/app_name"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

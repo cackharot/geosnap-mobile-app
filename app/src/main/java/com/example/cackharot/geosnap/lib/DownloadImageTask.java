@@ -1,5 +1,6 @@
 package com.example.cackharot.geosnap.lib;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -10,14 +11,18 @@ import android.widget.ImageView;
 import java.io.InputStream;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private final UserSessionManager userSessionManager;
     ImageView bmImage;
 
-    public DownloadImageTask(ImageView bmImage) {
+    public DownloadImageTask(Context context, ImageView bmImage) {
         this.bmImage = bmImage;
+        this.userSessionManager = new UserSessionManager(context);
     }
 
     protected Bitmap doInBackground(String... urls) {
         String imgUrl = urls[0];
+        imgUrl = imgUrl.replaceAll("serverAddress", userSessionManager.getServerAddress());
+        imgUrl = imgUrl.replaceAll("serverPort", String.valueOf(userSessionManager.getServerPort()));
         Bitmap bm = null;
         try {
             InputStream in = new java.net.URL(imgUrl).openStream();
